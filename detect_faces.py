@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore")
 
 model=load('svm_model.joblib')
 
-detector = Detector(device="cuda")
+detector = Detector(device="cpu")
 
 cap = cv2.VideoCapture(0)
 recording = False
