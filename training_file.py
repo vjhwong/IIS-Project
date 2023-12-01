@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
+from feat import Detector 
 import warnings
 
 # to ignore all warnings
@@ -69,6 +70,8 @@ def hyperparameter_tuning_svm(train_in, train_out, val_in, val_out):
     return best_svm_model
 
 def main():
+    detector=Detector()
+
     file_path=".\\aus.csv"
     features, labels, scaler = read_and_preprocess(file_path)
     train_in, val_in, test_in, train_out, val_out, test_out = balanced_split(features, labels)
