@@ -100,7 +100,6 @@ def main():
         if recording:
             faces = detector.detect_faces(frame)
             landmarks = detector.detect_landmarks(frame, faces)
-            emotions = detector.detect_emotions(frame, faces, landmarks)
             aus = detector.detect_aus(frame, landmarks)
             test_output = best_svm_model.predict(aus[0])
             face_idx = 0
