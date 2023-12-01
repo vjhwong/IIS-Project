@@ -3,11 +3,13 @@ import os
 import pandas as pd
 from feat import Detector  
 import warnings
+from joblib import load
 
 # to ignore all warnings
 warnings.filterwarnings("ignore")
 
-#initialize the detector
+model=load('svm_model.joblib')
+
 detector = Detector(device="cuda")
 
 cap = cv2.VideoCapture(0)
@@ -19,11 +21,13 @@ while True:
     if recording:
         faces = detector.detect_faces(frame)
         landmarks = detector.detect_landmarks(frame, faces)
-        emotions = detector.detect_emotions(frame, faces, landmarks)
         aus = detector.detect_aus(frame, landmarks)
-        print(faces[0])
+        test_output = model.predict(aus[0])
+        face_idx = 0
         for (x, y, w, h, p) in faces[0]:
             cv2.rectangle(frame, (int(x), int(y)), (int(w), int(h)), (0, 0, 255), 3)
+            cv2.putText(frame, test_output[face_idx], (int(x), int(y - 10)), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 0, 255), 2)
+            face_idx+=1
         cv2.circle(frame, (20,20), 10, (0,0,255), -1)
     cv2.imshow("frame", frame)
     key = cv2.waitKey(1)

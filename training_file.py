@@ -6,10 +6,13 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from feat import Detector 
+
+from joblib import dump
 import warnings
 
 # to ignore all warnings
 warnings.filterwarnings("ignore")
+
 
 
 def read_and_preprocess(file_path):
@@ -90,6 +93,12 @@ def main():
     # Evaluate the model on the test set
     accuracy_test_svm = accuracy_score(test_out, predicted_test_svm)
     print("Accuracy of SVM model on the test set: ", accuracy_test_svm*100)
+
+
+    dump(best_svm_model, 'svm_model.joblib')
+
+
+
 
     cap = cv2.VideoCapture(0)
     recording = False
