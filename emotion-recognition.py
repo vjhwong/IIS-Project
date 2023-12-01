@@ -36,6 +36,7 @@ with open(csv_path, 'w',newline='') as csv_file:
             # load the image
             image = cv2.imread(image_path)
             
+            
             # analyze the image
             faces = detector.detect_faces(image)
             landmarks = detector.detect_landmarks(image, faces)
