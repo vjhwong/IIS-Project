@@ -17,7 +17,7 @@ csv_path='.\\aus.csv'
 #load the annotations
 dataset = pd.read_csv(path_to_file)
 
-emotions_dict= {'0':'neutral','1':'happy','2':'sad','3':'surprise','4':'fear','5':'disgust','6':'angry'}
+emotions_dict= {0 :'neutral',1:'happy',2:'sad',3:'surprise',4:'fear',5:'disgust',6:'angry'}
 
 with open(csv_path, 'w',newline='') as csv_file:
     csv_writer = csv.writer(csv_file)
