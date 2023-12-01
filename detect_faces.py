@@ -21,8 +21,9 @@ while True:
         landmarks = detector.detect_landmarks(frame, faces)
         emotions = detector.detect_emotions(frame, faces, landmarks)
         aus = detector.detect_aus(frame, landmarks)
-        for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x,y), (x+w, y+h), (0,255,0), 2)
+        print(faces[0])
+        for (x, y, w, h, p) in faces[0]:
+            cv2.rectangle(frame, (int(x), int(y)), (int(w), int(h)), (0, 0, 255), 3)
         cv2.circle(frame, (20,20), 10, (0,0,255), -1)
     cv2.imshow("frame", frame)
     key = cv2.waitKey(1)
