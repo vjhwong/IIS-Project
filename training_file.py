@@ -70,7 +70,7 @@ def hyperparameter_tuning_svm(train_in, train_out, val_in, val_out):
     return best_svm_model
 
 def main():
-    detector=Detector()
+    detector=Detector(device="cpu")
 
     file_path=".\\aus.csv"
     features, labels, scaler = read_and_preprocess(file_path)
@@ -102,9 +102,12 @@ def main():
             landmarks = detector.detect_landmarks(frame, faces)
             emotions = detector.detect_emotions(frame, faces, landmarks)
             aus = detector.detect_aus(frame, landmarks)
-            print(faces[0])
+            test_output = best_svm_model.predict(aus[0])
+            face_idx = 0
             for (x, y, w, h, p) in faces[0]:
                 cv2.rectangle(frame, (int(x), int(y)), (int(w), int(h)), (0, 0, 255), 3)
+                cv2.putText(frame, test_output[face_idx], (int(x), int(y - 10)), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 0, 255), 2)
+                face_idx+=1
             cv2.circle(frame, (20,20), 10, (0,0,255), -1)
         cv2.imshow("frame", frame)
         key = cv2.waitKey(1)
