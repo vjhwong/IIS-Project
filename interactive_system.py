@@ -3,20 +3,20 @@ from detect_faces import detect_emotion
 import time
 import threading
 
-furhat = None
+global furhat
+
 def set_furhat():
     furhat = FurhatRemoteAPI("localhost")
     voices = furhat.get_voices()
     furhat.set_voice(name='Matthew')
     return furhat
 
-def furhat_interaction(emotion):
+def furhat_interaction(emotion, furhat):
         #remember that is an array
-        emotion=detect_emotion()
         if len(emotion) != 0:
             emotion = emotion[0]
 
-        print(emotion)
+        #print(emotion)
         if emotion == "happy":
             furhat.say(text="Hello! I'm happy.")
             # Add more actions specific to happy emotion
