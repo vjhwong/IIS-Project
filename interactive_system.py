@@ -1,5 +1,4 @@
 from furhat_remote_api import FurhatRemoteAPI
-from detect_faces import detect_emotion 
 import time
 import threading
 
