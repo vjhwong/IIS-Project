@@ -33,9 +33,6 @@ if __name__ == "__main__":
     furhat.say(text="Hi there!")
     model = load('svm_model.joblib')
 
-    #interaction_thread = threading.Thread(target=interactive_system.furhat_interaction)
-    #interaction_thread.start()
-
     get_emotion_thread = threading.Thread(target=get_emotion, args=[furhat, queue, model])
     detect_faces_thread = threading.Thread(target=detect_faces.create_video, args = [queue, model])
 
