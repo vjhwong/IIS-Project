@@ -5,7 +5,6 @@ import os
 import pandas as pd
 from feat import Detector  
 import warnings
-from joblib import load
 import threading, queue
 
 cap = None
@@ -18,12 +17,10 @@ def destroy_video():
 def stop():
     stopped = True
 
-def create_video(queue : queue.Queue):
+def create_video(queue : queue.Queue, model):
     lock = threading.Lock()
     # to ignore all warnings
     warnings.filterwarnings("ignore")
-
-    model = load('svm_model.joblib')
 
     detector = Detector(device="cpu")
 
@@ -43,8 +40,10 @@ def create_video(queue : queue.Queue):
         with lock:
             queue.queue.clear()
             # modify the global variable
-            emotion = model.predict(aus[0])
-            queue.put(emotion)
+            queue.put(aus[0])
+
+        # tried to separate feature recognition and emotion prediciton but if we show the emotion in the video, we cannot do that
+        emotion = model.predict(aus[0])
         face_idx = 0
         for (x, y, w, h, p) in faces[0]:
             cv2.rectangle(frame, (int(x), int(y)), (int(w), int(h)), (0, 0, 255), 3)
