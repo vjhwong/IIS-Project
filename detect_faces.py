@@ -1,3 +1,5 @@
+import time
+
 import cv2
 import os
 import pandas as pd
@@ -43,14 +45,18 @@ def create_video(queue : queue.Queue):
             # modify the global variable
             emotion = model.predict(aus[0])
             queue.put(emotion)
-        #face_idx = 0
-        #for (x, y, w, h, p) in faces[0]:
-        #    cv2.rectangle(frame, (int(x), int(y)), (int(w), int(h)), (0, 0, 255), 3)
-        #    cv2.putText(frame, emotion[face_idx], (int(x), int(y - 10)), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 0, 255),
-        #                2)
-        #    face_idx += 1
+        face_idx = 0
+        for (x, y, w, h, p) in faces[0]:
+            cv2.rectangle(frame, (int(x), int(y)), (int(w), int(h)), (0, 0, 255), 3)
+            cv2.putText(frame, emotion[face_idx], (int(x), int(y - 10)), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 0, 255),2)
+            face_idx += 1
         print(emotion, flush=True)
         cv2.imshow("frame", frame)
+        k = cv2.waitKey(1)
+        if k == ord('q'):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
         
 
 
