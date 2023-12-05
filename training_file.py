@@ -13,13 +13,13 @@ import warnings
 # to ignore all warnings
 warnings.filterwarnings("ignore")
 
-
+AU_TO_DROP = ['AU11', 'AU26', 'AU24', 'AU28', 'AU10', 'AU09', 'AU04', 'AU17', 'AU02', 'AU05', 'AU23', 'AU15', 'AU01']
 
 def read_and_preprocess(file_path):
     data = pd.read_csv(file_path)
 
     labels = data["emotion"]
-    features = data.drop("emotion", axis=1)
+    features = data.drop(["emotion"] + AU_TO_DROP, axis=1)
 
     scaler = StandardScaler()
     features_standardized = scaler.fit_transform(features)
@@ -93,7 +93,6 @@ def main():
     # Evaluate the model on the test set
     accuracy_test_svm = accuracy_score(test_out, predicted_test_svm)
     print("Accuracy of SVM model on the test set: ", accuracy_test_svm*100)
-
 
     dump(best_svm_model, 'svm_model.joblib')
 

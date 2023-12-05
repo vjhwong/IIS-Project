@@ -15,13 +15,13 @@ def get_emotion(furhat, queue, model):
         print("reading emotion", flush=True)
         sys.stdout.flush()
         with lock:
-            aus = queue.get()
-        em = predict_emotion(aus, model)
+            em = queue.get()
+        #em = predict_emotion(aus, model)
         print("controller emotion " + em, flush=True)
         print(list(queue.queue))
         if em is not None or em != '':
             interactive_system.furhat_interaction(em, furhat)
-        time.sleep(3)
+        time.sleep(4)
 
 def predict_emotion(aus, model):
     emotion = model.predict(aus)
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     detect_faces_thread = threading.Thread(target=detect_faces.create_video, args = [queue, model])
 
     detect_faces_thread.start()
-    time.sleep(5)
+    time.sleep(7)
     get_emotion_thread.start()
 
     detect_faces.stop()
