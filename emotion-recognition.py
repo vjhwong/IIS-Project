@@ -60,22 +60,18 @@ with open(csv_path, 'w',newline='') as csv_file:
             negative_data = dataset[labels < 0]
 
             au_idx = 0
-            for au in aus[0]:
-                au_name = header_row[au_idx+1]
 
-                if valence >= 0:
-                    positive_emotion[au_name].append(au)
-                else: 
-                    negative_emotion[au_name].append(au)
-                au_idx += 1
-
-
-
-
-
-
-            #change emotion from number to string with name
             if len(aus[0]) != 0:
+                for au in aus[0][0]:
+                    au_name = header_row[au_idx+1]
+
+                    if valence >= 0:
+                        positive_emotion[au_name].append(au)
+                    else:
+                        negative_emotion[au_name].append(au)
+                    au_idx += 1
+                #print(positive_emotion)
+                #change emotion from number to string with name
                 row_data=[emotions_dict[expression]]+list(aus[0][0])
                 csv_writer.writerow(row_data)
             else:

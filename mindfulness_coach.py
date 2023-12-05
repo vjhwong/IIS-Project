@@ -21,7 +21,7 @@ def get_emotion(furhat, queue, model):
         print(list(queue.queue))
         if em is not None or em != '':
             interactive_system.furhat_interaction(em, furhat)
-        time.sleep(5)
+        time.sleep(3)
 
 def predict_emotion(aus, model):
     emotion = model.predict(aus)

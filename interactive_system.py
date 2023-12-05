@@ -17,13 +17,14 @@ def furhat_interaction(emotion, furhat):
 
         #print(emotion)
         if emotion == "happy":
-            furhat.say(text="Hello! I'm happy.")
-            # Add more actions specific to happy emotion
+            furhat.say(text="Hello! You look happy.")
         elif emotion == "sad":
-            furhat.say(text="Hello... I'm feeling a bit down.")
-            # Add more actions specific to sad emotion
+            furhat.say(text="Hello... You look sad.")
+        elif emotion == "angry":
+            furhat.say(text="Hello... You look angry.")
+        elif emotion == "neutral":
+            furhat.say(text="Hello... How are you feeling?")
         else:
             furhat.say(text="Hello! How can I help you today?")
-        time.sleep(5)  # Sleep for 5 seconds
 
 
