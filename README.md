@@ -1,4 +1,4 @@
-1. Furhat: Hello! How are you feeling today?
+1. Furhat: Hello! *analyse feeling*
    a. Neutral
       - Furhat: It's okay to feel neutral. What brings you here today?
         i. Discuss mindfulness exercises
