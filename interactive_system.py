@@ -1,3 +1,4 @@
+import numpy
 from furhat_remote_api import FurhatRemoteAPI
 import time
 import threading
@@ -106,8 +107,9 @@ def run_conversation_loop(name, furhat, queue):
     conversation_ended = False
     while not conversation_ended:
         em = get_an_emotion(queue, lock)
+        print("emoiton in loop: " + numpy.array_str(em))
         if em is not None or em != '':
-            reply = EMOTION_REPLY.get(em)
+            reply = EMOTION_REPLY.get(numpy.array_str(em))
             furhat.say(text=reply)
         time.sleep(3)
 
@@ -117,7 +119,6 @@ def get_an_emotion(queue, lock):
         em = queue.get()
     # em = predict_emotion(aus, model)
     print("controller emotion " + em, flush=True)
-    print(em)
-    print(list(queue.queue))
+    #print(list(queue.queue))
     #if em is not None or em != '':
     return em
