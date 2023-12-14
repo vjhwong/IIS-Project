@@ -47,28 +47,35 @@ def identification(furhat):
     identified = False
     name = ''
     if "yes" in result.message:
+        furhat.say(text="Please, identify yourself with a name and a password.")
+        time.sleep(2)
         while not identified:
-            furhat.say(text="Please, identify yourself with a name and a password.")
-            time.sleep(2)
             name, password = listen_to_name_and_password(furhat)
             if name is None:
+                furhat.say(text="I didn't get that, can you repeat it?")
+                time.sleep(1)
                 continue
             if is_name_and_password_valid(name,password):
                 identified = True
                 furhat.say(text="Hello " + name + ". Welcome back! I'm happy to see you.")
             else:
-                furhat.say(text="I'm sorry, I don’t seem to know you, " + name + ", or that id, can you repeat it? " \
-                                "If you say 'no' a new profile will be created?")
+                furhat.say(text="I'm sorry, I don’t seem to know " + name + " with that id, can you repeat it? " \
+                                "Otherwise, a new profile will be created")
+                time.sleep(2)
                 result = furhat.listen()
                 if "yes" in result.message:
-                    continue
-    while not identified:
+                    furhat.say(text="Please, identify yourself with a name and a password.")
+                    time.sleep(2)
+    if not identified:
         furhat.say(text="Let's create a new profile for you. "
                         "Tell me your name and password you want to use for your identification. "
                         "Say it slow in order name and password")
         time.sleep(5)
+    while not identified:
         name, password = listen_to_name_and_password(furhat)
         if name is None:
+            furhat.say(text="I didn't get that, can you repeat it?")
+            time.sleep(1)
             continue
         save_name_and_password(name, password)
         furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.") #TODO check if the name is correct
@@ -80,11 +87,14 @@ def listen_to_name_and_password(furhat):
     print("message is : " + result.message)
     if result.message is None or result.message == '':
         return None, None
+    if ' ' not in result.message:
+        return None, None
     name, password = result.message.split()
     print(name, password)
     if name == '' or name is None or password == '' or password is None:
         return None, None
     return name, password
+
 def save_name_and_password(name, password):
     pass
 
@@ -97,8 +107,9 @@ def run_conversation_loop(name, furhat, queue):
     while not conversation_ended:
         em = get_an_emotion(queue, lock)
         if em is not None or em != '':
-            reply = EMOTION_REPLY.get(em[0])
+            reply = EMOTION_REPLY.get(em)
             furhat.say(text=reply)
+        time.sleep(3)
 
 
 def get_an_emotion(queue, lock):
@@ -106,6 +117,7 @@ def get_an_emotion(queue, lock):
         em = queue.get()
     # em = predict_emotion(aus, model)
     print("controller emotion " + em, flush=True)
+    print(em)
     print(list(queue.queue))
     #if em is not None or em != '':
     return em
