@@ -8,7 +8,7 @@ import queue
 from joblib import load
 
 end_time_seconds = 30
-def get_emotion(furhat, queue, model):
+def get_emotion(furhat, queue, model, name):
     lock = threading.Lock()
     t_end = time.time() + end_time_seconds
     while time.time() < t_end:
@@ -23,17 +23,23 @@ def get_emotion(furhat, queue, model):
             interactive_system.furhat_interaction(em, furhat)
         time.sleep(4)
 
+
+def start_furhat_and_get_a_name():
+    furhat = interactive_system.set_furhat()
+    name = interactive_system.start_furhat(furhat)
+    return furhat, name
+
 def predict_emotion(aus, model):
     emotion = model.predict(aus)
     return emotion
 
 if __name__ == "__main__":
     queue = queue.Queue()
-    furhat = interactive_system.set_furhat()
-    furhat.say(text="Hi there!")
+
+    furhat, name = start_furhat_and_get_a_name()
     model = load('svm_model.joblib')
 
-    get_emotion_thread = threading.Thread(target=get_emotion, args=[furhat, queue, model])
+    get_emotion_thread = threading.Thread(target=get_emotion, args=[furhat, queue, model, name])
     detect_faces_thread = threading.Thread(target=detect_faces.create_video, args = [queue, model])
 
     detect_faces_thread.start()

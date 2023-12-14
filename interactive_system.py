@@ -10,14 +10,14 @@ def set_furhat():
     furhat.set_voice(name='Matthew')
     return furhat
 
+def start_furhat(furhat):
+    name = identification(furhat)
+    return name
 
 def furhat_interaction(emotion, furhat):
         #remember that is an array
         if len(emotion) != 0:
             emotion = emotion[0]
-
-        name = identification(furhat)
-        start_a_conversation(name, furhat)
 
         #print(emotion)
         #if emotion == "happy":
