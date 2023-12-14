@@ -56,7 +56,7 @@ def identification(furhat):
         result = furhat.listen()
         name, password = result.message.split()
         save_name_and_password(name, password)
-        furhat.say(text="Thank you, your new profile has been created! I am excited to start our new journey.")
+        furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.")
     return name
 
 def save_name_and_password(name, password):
