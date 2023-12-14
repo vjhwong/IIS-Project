@@ -39,7 +39,7 @@ if __name__ == "__main__":
     furhat, name = start_furhat_and_get_a_name()
     model = load('svm_model.joblib')
 
-    furhat_interaction = threading.Thread(target=interactive_system.run_conversation_loop, args=[furhat, queue, model, name])
+    furhat_interaction = threading.Thread(target=interactive_system.run_conversation_loop, args=[name, furhat, queue])
     detect_faces_thread = threading.Thread(target=detect_faces.create_video, args = [queue, model])
 
     detect_faces_thread.start()
