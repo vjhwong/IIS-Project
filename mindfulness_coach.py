@@ -41,8 +41,8 @@ if __name__ == "__main__":
     detect_faces_thread.start()
 
     furhat, name = start_furhat_and_get_a_name()
-    time.sleep(1)
     furhat_interaction = threading.Thread(target=interactive_system.run_conversation_loop, args=[name, furhat, queue])
+    time.sleep(3)
     furhat_interaction.start()
 
     detect_faces.stop()

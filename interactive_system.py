@@ -6,13 +6,13 @@ import threading
 global furhat
 
 EMOTION_REPLY = {
-    'FEAR' : 'Do you need any help? I can tell you authority numbers if you need them.',
-    'SURPRISE' : 'Surprised to see me? It’s been a long time',
-    'ANGRY' : 'I think something is disturbing your inner peace, what’s happened?',
-    'HAPPY' : 'I see you are in a good mood, have my last sessions helped?',
-    'SAD' : 'You seem sad, has anything happened since last time I saw you?',
-    'NEUTRAL' : 'How have you been?',
-    'DISGUST' : ''
+    'fear' : 'Do you need any help? I can tell you authority numbers if you need them.',
+    'surprise' : 'Surprised to see me? It’s been a long time',
+    'angry' : 'I think something is disturbing your inner peace, what’s happened?',
+    'happy' : 'I see you are in a good mood, have my last sessions helped?',
+    'sad' : 'You seem sad, has anything happened since last time I saw you?',
+    'neutral' : 'How have you been?',
+    'disgust' : ''
 }
 
 def set_furhat():
@@ -107,11 +107,10 @@ def run_conversation_loop(name, furhat, queue):
     conversation_ended = False
     while not conversation_ended:
         em = get_an_emotion(queue, lock)
-        print("emoiton in loop: " + numpy.array_str(em))
-        if em is not None or em != '':
-            reply = EMOTION_REPLY.get(numpy.array_str(em))
+        if len(em) != 0 and (em[0] is not None or em[0] != ''):
+            reply = EMOTION_REPLY.get(em[0])
             furhat.say(text=reply)
-        time.sleep(3)
+        time.sleep(5)
 
 
 def get_an_emotion(queue, lock):
