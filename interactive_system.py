@@ -49,10 +49,9 @@ def identification(furhat):
     if "yes" in result.message:
         while not identified:
             furhat.say(text="Please, identify yourself with a name and a password.")
-            time.sleep(1)
-            result = furhat.listen()
-            name,password = result.message.split()
-            if result.message is None or result.message == '':
+            time.sleep(2)
+            name, password = listen_to_name_and_password(furhat)
+            if name is None:
                 continue
             if is_name_and_password_valid(name,password):
                 identified = True
@@ -68,19 +67,24 @@ def identification(furhat):
                         "Tell me your name and password you want to use for your identification. "
                         "Say it slow in order name and password")
         time.sleep(5)
-        result = furhat.listen()
-        print("message is : " + result.message)
-        if result.message is None or result.message == '':
-            continue
-        name, password = result.message.split()
-        print(name, password)
-        if name == '' or name is None or password == '' or password is None:
+        name, password = listen_to_name_and_password(furhat)
+        if name is None:
             continue
         save_name_and_password(name, password)
         furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.") #TODO check if the name is correct
         identified = True
     return name
 
+def listen_to_name_and_password(furhat):
+    result = furhat.listen()
+    print("message is : " + result.message)
+    if result.message is None or result.message == '':
+        return None, None
+    name, password = result.message.split()
+    print(name, password)
+    if name == '' or name is None or password == '' or password is None:
+        return None, None
+    return name, password
 def save_name_and_password(name, password):
     pass
 
@@ -93,7 +97,7 @@ def run_conversation_loop(name, furhat, queue):
     while not conversation_ended:
         em = get_an_emotion(queue, lock)
         if em is not None or em != '':
-            reply = EMOTION_REPLY.get(em)
+            reply = EMOTION_REPLY.get(em[0])
             furhat.say(text=reply)
 
 

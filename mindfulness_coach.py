@@ -36,14 +36,13 @@ def predict_emotion(aus, model):
 if __name__ == "__main__":
     queue = queue.Queue()
 
-    furhat, name = start_furhat_and_get_a_name()
+
     model = load('svm_model.joblib')
-
-    furhat_interaction = threading.Thread(target=interactive_system.run_conversation_loop, args=[name, furhat, queue])
     detect_faces_thread = threading.Thread(target=detect_faces.create_video, args = [queue, model])
-
     detect_faces_thread.start()
-    time.sleep(7)
+
+    furhat, name = start_furhat_and_get_a_name()
+    furhat_interaction = threading.Thread(target=interactive_system.run_conversation_loop, args=[name, furhat, queue])
     furhat_interaction.start()
 
     detect_faces.stop()
