@@ -4,6 +4,16 @@ import threading
 
 global furhat
 
+EMOTION_REPLY = {
+    'FEAR' : 'Do you need any help? I can tell you authority numbers if you need them.',
+    'SURPRISE' : 'Surprised to see me? It’s been a long time',
+    'ANGRY' : 'I think something is disturbing your inner peace, what’s happened?',
+    'HAPPY' : 'I see you are in a good mood, have my last sessions helped?',
+    'SAD' : 'You seem sad, has anything happened since last time I saw you?',
+    'NEUTRAL' : 'How have you been?',
+    'DISGUST' : ''
+}
+
 def set_furhat():
     furhat = FurhatRemoteAPI("localhost")
     voices = furhat.get_voices()
@@ -65,5 +75,21 @@ def save_name_and_password(name, password):
 def is_name_and_password_valid(name,password):
     return True
 
-def start_a_conversation(name, furhat):
-    pass
+def run_conversation_loop(name, furhat, queue):
+    lock = threading.Lock()
+    conversation_ended = False
+    while not conversation_ended:
+        em = get_an_emotion(queue, lock)
+        if em is not None or em != '':
+            reply = EMOTION_REPLY.get(em)
+            furhat.say(text=reply)
+
+
+def get_an_emotion(queue, lock):
+    with lock:
+        em = queue.get()
+    # em = predict_emotion(aus, model)
+    print("controller emotion " + em, flush=True)
+    print(list(queue.queue))
+    #if em is not None or em != '':
+    return em
