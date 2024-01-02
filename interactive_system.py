@@ -160,7 +160,7 @@ def listen_for_stop_in_response():
             return True
     return False
 
-def breathing_excercices(name, furhat, lock, queue):
+def breathing_excercice(name, furhat, lock, queue):
     #https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/breathing-exercises-for-stress/
     furhat.say(text="Here's a simple breathing excercise. Can we start? ")
     result = furhat.listen()
@@ -526,3 +526,37 @@ def meditation_for_happiness(name, furhat, lock, queue):
         furhat.say(text="Do you want to try something different?")
             #TODO sth different
 
+def mindfulness_exercise(name, furhat, lock, queue):
+    furhat.say(text="Here's a simple guided mindfulness exercise. Can we start? ")
+    result = furhat.listen()
+    if "yes" in result.message:
+        furhat.say(text="Let's start. If you wish to stop at any time, you can just say so.")
+        time.sleep(2)
+    if "how long" in result.message:
+        furhat.say(text="This exercise takes about 10 minutes.")
+    if "other choice" in result.message or "something different" in result.message:
+        furhat.say(text="Do you want to try something different?")  # TODO sth different
+    if "no" in result.message:
+        furhat.say(
+            text="I caught that you don't want to do this. Do you want to try something different?")  # TODO something different
+
+
+def mindful_breathing(furhat, lock, queue):
+    pass
+
+def body_scan(furhat, lock, queue):
+    pass
+
+def five_senses_exercise(furhat, lock, queue):
+    pass
+
+def chakra_or_energy_meditation(furhat, lock, queue):
+    pass
+
+def walking_meditation(furhat, lock, queue):
+    pass
+
+def deep_breathing(furhat, lock, queue):
+    pass
+
+def box_breathing(furhat, lock, queue):
