@@ -256,6 +256,7 @@ def breathing_excercices(name, furhat, lock, queue):
     furhat.say(
         text="You've finished this breathing exercise. You will get the most benefit if you do it regularly, as part of your daily routine.")
 
+    #TODO check emotions here? or later?
     furhat.say("Thank you for spending time with me. Did this session help?")
     result = furhat.listen()
     if "yes" in result:
@@ -263,6 +264,43 @@ def breathing_excercices(name, furhat, lock, queue):
     else:
         furhat.say(text="Do you want to try something different?")
         # TODO sth different
+
+def say_camforting_story(furhat, lock, queue):
+    furhat.say("To understand you better, what happened? Is this work related or school related? Or about relationships?")
+    result = furhat.listen()
+    if "work" in result:
+        furhat.say(
+            "I see. You can tell me more if you wish.")
+        time.sleep(2)
+        result = furhat.listen()
+        if "colleague" in result:
+            furhat.say(
+                "You can try talk to this colleague")
+            time.sleep(2)
+        if "boss" in result:
+            furhat.say(
+                "You can try talk to your boss about your situation")
+            time.sleep(2)
+        if "stress" in result or "hard" in result or "difficult" in result or "exhausted" in result or "exhausting" in result or "overtime" in result:
+            #https://www.helpguide.org/articles/stress/stress-in-the-workplace.htm
+            furhat.say(
+                "Try reach out to someone if you find your job position too stressful. "
+                "You should also support your health with exercise and nutrition. Don't skimp on sleep instead, try to go to bed early. And create a balanced schedule, leave earlier in the mornings and plan regular breaks.")
+            time.sleep(2)
+        elif result != "":
+            furhat.say(
+                "I understand. That is a disappointing situation. But remember, challenges are what make life interesting"
+                "and overcoming them is what makes life meaningful.")
+            time.sleep(2)
+            result = furhat.listen()
+    if "school" in result or "uni" in result or "university" in result:
+        pass
+    if "friendship" in result or "friend" in result:
+        pass
+    if "love" in result or "boyfriend" in result or "girlfriend" in result:
+        pass
+    if "relationship" in result:
+        pass
 
 def meditation_for_happiness(name, furhat, lock, queue):
     #https://jackcanfield.com/blog/happiness-meditation/
