@@ -272,6 +272,7 @@ def say_camforting_story(furhat, lock, queue):
     while not caught_answer:
         result = furhat.listen()
         if "work" in result:
+            caught_answer = True
             furhat.say(
                 "I see. You can tell me more if you wish.")
             time.sleep(2)
@@ -297,8 +298,33 @@ def say_camforting_story(furhat, lock, queue):
                 time.sleep(2)
                 result = furhat.listen()
         if "school" in result or "uni" in result or "university" or "college" in result in result or "teacher" in result or "classmate" in result:
-            pass
+            caught_answer = True
+            furhat.say(
+                "I see. You can tell me more if you wish.")
+            time.sleep(2)
+            result = furhat.listen()
+            if "classmate" in result:
+                furhat.say(
+                    "You can try talk to this colleague")
+                time.sleep(2)
+            if "teacher" in result:
+                furhat.say(
+                    "You can try talk to your teacher or another authority about your situation")
+                time.sleep(2)
+            if "stress" in result or "hard" in result or "difficult" in result or "exhausted" in result or "exhausting" in result or "marks" in result:
+                # https://www.helpguide.org/articles/stress/stress-in-the-workplace.htm
+                furhat.say(
+                    "Try reach out to someone if you find the school too stressful or too demanding. "
+                    "You should also support your health with exercise and nutrition. Don't skimp on sleep instead, try to go to bed early. And create a balanced schedule, leave earlier in the mornings and plan regular breaks.")
+                time.sleep(2)
+            elif result != "":
+                furhat.say(
+                    "I understand. That is a difficult situation. But remember, challenges are what make life interesting"
+                    "and overcoming them is what makes life meaningful.")
+                time.sleep(2)
+                result = furhat.listen()
         if "friendship" in result or "friend" in result:
+            caught_answer = True
             furhat.say(
                 "I see. You can tell me more if you wish.")
             time.sleep(2)
@@ -338,6 +364,7 @@ def say_camforting_story(furhat, lock, queue):
                     "and overcoming them is what makes life meaningful.")
                 time.sleep(2)
         if "love" in result or "boyfriend" in result or "girlfriend" in result or "relationship" in result:
+            caught_answer = True
             furhat.say(
                 "I see. You can tell me more if you wish.")
             time.sleep(2)
@@ -358,8 +385,12 @@ def say_camforting_story(furhat, lock, queue):
                 furhat.say(
                     "I understand. That is a difficult situation. But remember, challenges are what make life interesting"
                     "and overcoming them is what makes life meaningful.")
+        elif "stop" in result or "end" in result:
+            furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
+            #TODO something different
         else:
-            pass
+            furhat.say(
+                "I didn't catch that. Can you repeat it, please?")
 
 
 def meditation_for_happiness(name, furhat, lock, queue):
@@ -374,7 +405,7 @@ def meditation_for_happiness(name, furhat, lock, queue):
     if "other choice" in result.message or "something different" in result.message:
         furhat.say(text="Do you want to try something different?") #TODO sth different
     if "no" in result.message:
-        furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
+        furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")#TODO something different
 
     stopped = stopped_if_user_wants_to_stop(queue, lock)
     if stopped:
