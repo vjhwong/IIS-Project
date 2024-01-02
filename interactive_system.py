@@ -210,32 +210,59 @@ def breathing_excercices(name, furhat, lock, queue):
     if stopped:
         return
 
-    wants_to_stop = False
+    furhat.say(
+        text="Let your breath flow as deep down into your belly as is comfortable, without forcing it.")
+    time.sleep(2)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+    furhat.say(
+        text="Try breathing in through your nose and out through your mouth.")
+    time.sleep(2)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+    furhat.say(
+        text="Breathe in gently and regularly. Some people find it helpful to count steadily from 1 to 5. You may not be able to reach 5 at first.")
+    time.sleep(2)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+    furhat.say(
+        text="Then let it flow out gently, counting from 1 to 5 again, if you find this helpful.")
+    time.sleep(2)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+    furhat.say(
+        text="Now, repeat this for at least five minutes. I will be notifying you about the time")
 
-    while(not wants_to_stop):
-        furhat.say(
-            text="Let your breath flow as deep down into your belly as is comfortable, without forcing it.")
-        time.sleep(2)
-        stopped = stopped_if_user_wants_to_stop(queue, lock)
-        if stopped:
-            return
-        furhat.say(
-            text="Try breathing in through your nose and out through your mouth.")
-        time.sleep(2)
-        stopped = stopped_if_user_wants_to_stop(queue, lock)
-        if stopped:
-            return
-        furhat.say(
-            text="Breathe in gently and regularly. Some people find it helpful to count steadily from 1 to 5. You may not be able to reach 5 at first.")
-        time.sleep(2)
-        stopped = stopped_if_user_wants_to_stop(queue, lock)
-        if stopped:
-            return
-        furhat.say(
-            text="Then let it flow out gently, counting from 1 to 5 again, if you find this helpful.")
-        time.sleep(2)
-        wants_to_stop = stopped_if_user_wants_to_stop(queue, lock)
+    iteration = 1
+    for i in range(5):
+        result = furhat.listen(timeout=1 * 60000)
+        if result != '':
+            furhat.say("Do you want to stop?")
+            result = furhat.listen()
+            if "yes" in result.message:
+                return False  # TODO stop
+        if iteration == 1:
+            furhat.say(
+                text= str(iteration) + " minute has passed. Let's keep doing this, you're doing great!")
+        else:
+            furhat.say(
+                text=str(iteration) + " minutes has passed. Let's keep doing this, you're doing great!")
+        iteration += 1
 
+    furhat.say(
+        text="You've finished this breathing exercise. You will get the most benefit if you do it regularly, as part of your daily routine.")
+
+    furhat.say("Thank you for spending time with me. Did this session help?")
+    result = furhat.listen()
+    if "yes" in result:
+        furhat.say("I'm glad this helped. Hope to see you tomorrow.")
+    else:
+        furhat.say(text="Do you want to try something different?")
+        # TODO sth different
 
 def meditation_for_happiness(name, furhat, lock, queue):
     #https://jackcanfield.com/blog/happiness-meditation/
@@ -342,7 +369,7 @@ def meditation_for_happiness(name, furhat, lock, queue):
     stopped = stopped_if_user_wants_to_stop(queue, lock)
     if stopped:
         return
-    
+
     result = furhat.listen(timeout = 5*60000)
     if result != '':
         furhat.say("Do you want to stop?")
