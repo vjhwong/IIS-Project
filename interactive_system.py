@@ -290,6 +290,7 @@ def say_camforting_story(furhat, lock, queue):
                 furhat.say(
                     "Try reach out to someone if you find your job position too stressful. "
                     "You should also support your health with exercise and nutrition. Don't skimp on sleep instead, try to go to bed early. And create a balanced schedule, leave earlier in the mornings and plan regular breaks.")
+                furhat.say("You can try some of my relaxing meditations or breathing exercises.")
                 time.sleep(2)
             elif result != "":
                 furhat.say(
@@ -316,6 +317,7 @@ def say_camforting_story(furhat, lock, queue):
                 furhat.say(
                     "Try reach out to someone if you find the school too stressful or too demanding. "
                     "You should also support your health with exercise and nutrition. Don't skimp on sleep instead, try to go to bed early. And create a balanced schedule, leave earlier in the mornings and plan regular breaks.")
+                furhat.say("You can try some of my relaxing meditations or breathing exercises.")
                 time.sleep(2)
             elif result != "":
                 furhat.say(
@@ -542,21 +544,73 @@ def mindfulness_exercise(name, furhat, lock, queue):
 
 
 def mindful_breathing(furhat, lock, queue):
-    pass
+    # https://www.verywellhealth.com/mindfulness-exercises-5204406 and https://www.healthline.com/health/box-breathing#hold-your-breath
+
+    furhat.say("This technique can be beneficial to anyone, especially those who want to meditate or reduce stress.")
+    furhat.say(
+        "Make sure that you’re seated upright in a comfortable chair with your feet flat on the floor. Try to be in a stress-free, quiet environment where you can focus on your breathing.")
+    furhat.say("Keeping your hands relaxed in your lap with your palms facing up, focus on your posture.")
+    time.sleep(5)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+
+    furhat.say("Breathe in through your nose for a count of 4. Feel the air fill your lungs, one section at a time, until your lungs are completely full and the air moves into your abdomen.")
+    time.sleep(4)
+    furhat.say("Now hold for another 4 seconds")
+    time.sleep(4)
+    furhat.say("Exhale through your mouth for a count of 4. Be conscious of the feeling of the air leaving your lungs.")
+    time.sleep(4)
+    furhat.say("Now hold for another 4 seconds")
+    time.sleep(4)
+    furhat.say("Repeat until you want to stop.")
+    time.sleep(5)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
 def body_scan(furhat, lock, queue):
-    pass
+    #https://www.mayoclinic.org/healthy-lifestyle/consumer-health/in-depth/mindfulness-exercises/art-20046356
+    furhat.say("Lie on your back with your legs extended and arms at your sides, palms facing up.")
+    furhat.say("Focus your attention slowly and deliberately on each part of your body, in order, from toe to head or head to toe. Be aware of any sensations, emotions or thoughts associated with each part of your body.")
+    time.sleep(5)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
 def five_senses_exercise(furhat, lock, queue):
-    pass
+    #https://www.verywellhealth.com/mindfulness-exercises-5204406
+    furhat.say("Notice five things you can see.")
+    time.sleep(5)
+    furhat.say("Notice four things you can feel.")
+    time.sleep(5)
+    furhat.say("Notice three things you can hear.")
+    time.sleep(5)
+    furhat.say("Notice two things you can smell.")
+    time.sleep(5)
+    furhat.say("Notice one thing you can taste.")
+    time.sleep(5)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
-def chakra_or_energy_meditation(furhat, lock, queue):
-    pass
 
 def walking_meditation(furhat, lock, queue):
-    pass
+    #https://www.mayoclinic.org/healthy-lifestyle/consumer-health/in-depth/mindfulness-exercises/art-20046356
+    furhat.say("Find a quiet place 10 to 20 feet in length, and begin to walk slowly. "
+               "Focus on the experience of walking, being aware of the sensations of standing and the subtle movements that keep your balance. When you reach the end of your path, turn and continue walking, maintaining awareness of your sensations.")
+    time.sleep(5)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
-def deep_breathing(furhat, lock, queue):
-    pass
+def gratitude_list(furhat, lock, queue):
+    #https://www.healthline.com/health/mind-body/mindfulness-activities#for-adults
+    furhat.say("Creating a gratitude list may help improve well-being and promoteTrusted Source positivity by helping you focus on the things that you’re grateful for.")
+    furhat.say("Try adding 3-5 items to your list each day and build it into your daily schedule to stay consistent.")
+    furhat.say("You can write your gratitude list first thing in the morning to get your day off to a great start or list a few things that you’re grateful for before winding down for bed.")
+    time.sleep(5)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
-def box_breathing(furhat, lock, queue):
