@@ -132,6 +132,18 @@ def is_happy_by_emotion(queue, lock):
                 return False
     return True
 
+def stopped_if_user_wants_to_stop(queue, lock):
+    if does_user_want_to_stop(queue, lock):
+        furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
+        result = furhat.listen()
+        if "yes" in result.message:
+            furhat.say(text="Let's try something different then!")
+            return True
+        else:
+            furhat.say(text="Let's continue then!")
+            return False
+
+
 def does_user_want_to_stop(queue, lock):
     if listen_for_stop_in_response():
         return True
@@ -148,14 +160,89 @@ def listen_for_stop_in_response():
             return True
     return False
 
+def breathing_excercices(name, furhat, lock, queue):
+    #https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/breathing-exercises-for-stress/
+    furhat.say(text="Here's a simple breathing excercise. Can we start? ")
+    result = furhat.listen()
+    if "yes" in result.message:
+        furhat.say(text="Let's start. If you wish to stop at any time, you can just say so.")
+        time.sleep(2)
+    if "how long" in result.message:
+        furhat.say(text="This breathing exercise takes just a few minutes.")
+    if "other choice" in result.message or "something different" in result.message:
+        furhat.say(text="Do you want to try something different?")  # TODO sth different
+    if "no" in result.message:
+        furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
+
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+
+    furhat.say(text="You can do it standing up, sitting in a chair that supports your back, or lying on a bed or yoga mat on the floor.")
+    time.sleep(2)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+    furhat.say(
+        text="Make yourself as comfortable as you can. If you can, loosen any clothes that restrict your breathing.")
+    time.sleep(2)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+    furhat.say(
+        text="If you're lying down, place your arms a little bit away from your sides, with the palms up. Let your legs be straight, "
+             "or bend your knees so your feet are flat on the floor.")
+    time.sleep(5)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+    furhat.say(
+        text="If you're sitting, place your arms on the chair arms.")
+    time.sleep(2)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+    furhat.say(
+        text="If you're sitting or standing, place both feet flat on the ground. Whatever position you're in, "
+             "place your feet roughly hip-width apart.")
+    time.sleep(2)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+
+    wants_to_stop = False
+
+    while(not wants_to_stop):
+        furhat.say(
+            text="Let your breath flow as deep down into your belly as is comfortable, without forcing it.")
+        time.sleep(2)
+        stopped = stopped_if_user_wants_to_stop(queue, lock)
+        if stopped:
+            return
+        furhat.say(
+            text="Try breathing in through your nose and out through your mouth.")
+        time.sleep(2)
+        stopped = stopped_if_user_wants_to_stop(queue, lock)
+        if stopped:
+            return
+        furhat.say(
+            text="Breathe in gently and regularly. Some people find it helpful to count steadily from 1 to 5. You may not be able to reach 5 at first.")
+        time.sleep(2)
+        stopped = stopped_if_user_wants_to_stop(queue, lock)
+        if stopped:
+            return
+        furhat.say(
+            text="Then let it flow out gently, counting from 1 to 5 again, if you find this helpful.")
+        time.sleep(2)
+        wants_to_stop = stopped_if_user_wants_to_stop(queue, lock)
 
 
 def meditation_for_happiness(name, furhat, lock, queue):
     #https://jackcanfield.com/blog/happiness-meditation/
-    furhat.say(text="Here's a simple guided meditation for happiness. Can we start?")
+    furhat.say(text="Here's a simple guided meditation for happiness. Can we start? ")
     result = furhat.listen()
     if "yes" in result.message:
-        furhat.say(text="Please, identify yourself with a name and a password.")
+        furhat.say(text="Let's start. If you wish to stop at any time, you can just say so.")
         time.sleep(2)
     if "how long" in result.message:
         furhat.say(text="This meditation is for 10 minutes.")
@@ -164,25 +251,37 @@ def meditation_for_happiness(name, furhat, lock, queue):
     if "no" in result.message:
         furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
 
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
     furhat.say(text="Sit for a moment and take a few long inhalations and exhalations. Focus on the breathing.")
     time.sleep(5)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
     furhat.say(text="Breath in slowly and breath out slowly.")
     time.sleep(5)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
     furhat.say("CLear your mind. If you find your thoughts shifting from the breathing, gently release that thought and concentrate on breathing.")
     time.sleep(5)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
     furhat.say("Think of your thoughts as train cars passing through the station. You’re on the platform, watching them go past.")
     time.sleep(10)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
     furhat.say("Your mind should be quiet now. Let's thank to what you're experiencing.")
     furhat.say("Give thanks to your mind, which allows you to think of all your thoughts. ")
     time.sleep(2)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
     furhat.say("Be grateful for your eyes, that allow you to see the world’s beauty. "
                "Give thanks to your ears that allow you to hear the world’s music, and then to your mouth "
                "that allows you to taste the world’s deliciousness in all its myriad forms.")
@@ -194,42 +293,56 @@ def meditation_for_happiness(name, furhat, lock, queue):
                "playing a musical instrument, creating a piece of art, cooking a meal, or hugging a loved one, "
                "or making love.")
     time.sleep(5)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
     furhat.say("Be grateful for your lungs, for allowing you to breathe, and for your throat, for allowing you to speak and sing. "
                "And be grateful for your legs and feet, for making it possible for you to walk, run, jump, and dance.")
     time.sleep(10)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
     furhat.say("Be grateful for the chair you’re sitting on, and the people who put their time and effort into making that chair. "
                "Be grateful for the money that allowed you to buy that chair, or the person who gave it to you.")
     time.sleep(5)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
     furhat.say("Be grateful for the coffee cup beside you, and the delicious coffee it used to hold "
                "that’s now flowing through your veins, making you feel more awake and alert.")
     time.sleep(2)
     furhat.say("Be grateful for the clothes that you’re wearing, and the person who made those clothes, "
                "and the job that gave you the money you needed to buy them.")
     time.sleep(2)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
     furhat.say("Be grateful for your home, and your family and your friends. "
                "Be grateful for the people who make your life better or easier in some way—"
                "like the people at the grocery store, the gas station, the coffee shops, and the restaurants—the garbage men, "
                "the taxi drivers and Uber drivers, the weathermen and women, the doctors, nurses, healers and holistic practitioners.")
     time.sleep(5)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
     furhat.say("Be grateful for the city and the country you live in, and the freedoms and rights that are available to you. "
                "Be grateful for the natural world around you—the birds that you hear out the window, the flowers and the trees, "
                "the parks and the bodies of water, and the fish that swim the ocean. ")
     time.sleep(5)
-    does_user_want_to_stop(queue, lock)
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
 
     furhat.say("Expand your gratitude to whatever you can think of. You can even feel gratitude for the planet, the solar system, the stars, and even for life itself!")
     furhat.say("Gently let your mind drift from topic to topic, while consciously practicing gratitude for everything that occurs to you.")
     furhat.say("Try to maintain this state for about 5 minutes if you can.")
-    does_user_want_to_stop(queue, lock)
-
+    stopped = stopped_if_user_wants_to_stop(queue, lock)
+    if stopped:
+        return
+    
     result = furhat.listen(timeout = 5*60000)
     if result != '':
         furhat.say("Do you want to stop?")
@@ -245,7 +358,8 @@ def meditation_for_happiness(name, furhat, lock, queue):
                "and make larger improvements in your mental health.")
     time.sleep(2)
     furhat.say("This simple meditation can have a huge impact on your mindset and your vibration. "
-               "If you return to me tomorrow as well, you will find it so much easier to experience more joy and happiness in your life.")
+               "If you practice this excercise tomorrow as well, you will find it so much easier to experience more joy "
+               "and happiness in your life.")
     time.sleep(2)
 
     furhat.say("Thank you for spending time with me. Did this session help?")
