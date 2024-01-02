@@ -267,68 +267,100 @@ def breathing_excercices(name, furhat, lock, queue):
 
 def say_camforting_story(furhat, lock, queue):
     furhat.say("To understand you better, what happened? Is this work related or school related? Or about relationships?")
-    result = furhat.listen()
-    if "work" in result:
-        furhat.say(
-            "I see. You can tell me more if you wish.")
-        time.sleep(2)
+    caught_answer = False
+
+    while not caught_answer:
         result = furhat.listen()
-        if "colleague" in result:
+        if "work" in result:
             furhat.say(
-                "You can try talk to this colleague")
-            time.sleep(2)
-        if "boss" in result:
-            furhat.say(
-                "You can try talk to your boss about your situation")
-            time.sleep(2)
-        if "stress" in result or "hard" in result or "difficult" in result or "exhausted" in result or "exhausting" in result or "overtime" in result:
-            #https://www.helpguide.org/articles/stress/stress-in-the-workplace.htm
-            furhat.say(
-                "Try reach out to someone if you find your job position too stressful. "
-                "You should also support your health with exercise and nutrition. Don't skimp on sleep instead, try to go to bed early. And create a balanced schedule, leave earlier in the mornings and plan regular breaks.")
-            time.sleep(2)
-        elif result != "":
-            furhat.say(
-                "I understand. That is a difficult situation. But remember, challenges are what make life interesting"
-                "and overcoming them is what makes life meaningful.")
+                "I see. You can tell me more if you wish.")
             time.sleep(2)
             result = furhat.listen()
-    if "school" in result or "uni" in result or "university" or "college" in result in result or "teacher" in result or "classmate" in result:
-        pass
-    if "friendship" in result or "friend" in result:
-        if "lonely" in result or "no friend" in result or "don't have any friend" in result or "zero friends" in result:
-            # https://www.verywellmind.com/i-have-no-friends-what-to-do-5200867
+            if "colleague" in result:
+                furhat.say(
+                    "You can try talk to this colleague")
+                time.sleep(2)
+            if "boss" in result:
+                furhat.say(
+                    "You can try talk to your boss about your situation")
+                time.sleep(2)
+            if "stress" in result or "hard" in result or "difficult" in result or "exhausted" in result or "exhausting" in result or "overtime" in result:
+                #https://www.helpguide.org/articles/stress/stress-in-the-workplace.htm
+                furhat.say(
+                    "Try reach out to someone if you find your job position too stressful. "
+                    "You should also support your health with exercise and nutrition. Don't skimp on sleep instead, try to go to bed early. And create a balanced schedule, leave earlier in the mornings and plan regular breaks.")
+                time.sleep(2)
+            elif result != "":
+                furhat.say(
+                    "I understand. That is a difficult situation. But remember, challenges are what make life interesting"
+                    "and overcoming them is what makes life meaningful.")
+                time.sleep(2)
+                result = furhat.listen()
+        if "school" in result or "uni" in result or "university" or "college" in result in result or "teacher" in result or "classmate" in result:
+            pass
+        if "friendship" in result or "friend" in result:
             furhat.say(
-                "Having no friends is a common difficulty many people suffer no matter the age.")
+                "I see. You can tell me more if you wish.")
             time.sleep(2)
+            result = furhat.listen()
+            if "lonely" in result or "no friend" in result or "don't have any friend" in result or "zero friends" in result:
+                # https://www.verywellmind.com/i-have-no-friends-what-to-do-5200867
+                furhat.say(
+                    "Having no friends is a common difficulty many people suffer no matter the age.")
+                time.sleep(2)
+                furhat.say(
+                    "Sometimes, it is not easy to make friends. Either you're shy or have social anxiety, there can be many reasons.")
+                time.sleep(2)
+                furhat.say(
+                    "But you should not be afraid to meet new people or rejection. You just may not connect with every person you talk to and that's okay.")
+                time.sleep(2)
+                furhat.say(
+                    "Find people who have similar interests. Try to join some clubs. You enjoy reading? Join a reading club!"
+                    " You enjoy playing football? Join a football club! You get the gist") #TODO wink
+                time.sleep(2)
+                furhat.say(
+                    "Try volunteering. Be friendly, be open-minded and truthful when asked question.")
+                time.sleep(2)
+                furhat.say(
+                    "And just try to talk to people. There are other people like you looking for friends."
+                    "Ask about their interests and try to find something that you might have in common.")
+                time.sleep(2)
+            elif "fight" in result or "disagree" in result:
+                #https://kidshelpline.com.au/teens/issues/fights-friends
+                furhat.say(
+                    "If you had a fight with your friend or you disagree on something, you can talk it out. "
+                    "Try to reach out to your friend. Stay calm and respectful. Acknowledge their feelings and listen. "
+                    "Take time out and don't pull others in. You will sort it out.")
+                time.sleep(5)
+            elif result != "":
+                furhat.say(
+                    "I understand. That is a difficult situation. But remember, challenges are what make life interesting"
+                    "and overcoming them is what makes life meaningful.")
+                time.sleep(2)
+        if "love" in result or "boyfriend" in result or "girlfriend" in result or "relationship" in result:
             furhat.say(
-                "Sometimes, it is not easy to make friends. Either you're shy or have social anxiety, there can be many reasons.")
+                "I see. You can tell me more if you wish.")
             time.sleep(2)
-            furhat.say(
-                "But you should not be afraid to meet new people or rejection. You just may not connect with every person you talk to and that's okay.")
-            time.sleep(2)
-            furhat.say(
-                "Find people who have similar interests. Try to join some clubs. You enjoy reading? Join a reading club!"
-                " You enjoy playing football? Join a football club! You get the gist") #TODO wink
-            time.sleep(2)
-            furhat.say(
-                "Try volunteering. Be friendly, be open-minded and truthful when asked question.")
-            time.sleep(2)
-            furhat.say(
-                "And just try to talk to people. There are other people like you looking for friends."
-                "Ask about their interests and try to find something that you might have in common.")
-            time.sleep(2)
-        elif "fight" in result or "disagree" in result:
-            #https://kidshelpline.com.au/teens/issues/fights-friends
-            furhat.say(
-                "If you had a fight with your friend or you disagree on something, you can talk it out. "
-                "Try to reach out to your friend. Stay calm and respectful. Acknowledge their feelings and listen. "
-                "Take time out and don't pull others in. You will sort it out.")
-            time.sleep(5)
-    if "love" in result or "boyfriend" in result or "girlfriend" in result:
-        pass
-    if "relationship" in result:
-        pass
+            result = furhat.listen()
+            if "lonely" in result or "no love" in result or "don't have anyone" in result or "no boyfriend" in result or "no gilfreind" in result or "want" in result:
+                furhat.say(
+                    "I'll quote Lucille Ball here. Love yourself first and everything else falls into line. "
+                    "You really have to love yourself to get anything done in this world.")
+                time.sleep(2)
+            elif "fight" in result or "disagree" in result:
+                #https://kidshelpline.com.au/teens/issues/fights-friends
+                furhat.say(
+                    "If you had a fight with your friend or you disagree on something, you can talk it out. "
+                    "Try to reach out to your friend. Stay calm and respectful. Acknowledge their feelings and listen. "
+                    "Take time out and don't pull others in. You will sort it out.")
+                time.sleep(5)
+            elif result != "":
+                furhat.say(
+                    "I understand. That is a difficult situation. But remember, challenges are what make life interesting"
+                    "and overcoming them is what makes life meaningful.")
+        else:
+            pass
+
 
 def meditation_for_happiness(name, furhat, lock, queue):
     #https://jackcanfield.com/blog/happiness-meditation/
