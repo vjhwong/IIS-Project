@@ -127,12 +127,14 @@ def run_conversation_loop(name, furhat, queue):
                 result = result.message
 
                 if "yes" in result or "list" in result or "options" in result or "different" in result:
-                    offer_options(name, furhat, queue, lock)
-                # TODO start listing options
+                    was_happy = offer_options(name, furhat, queue, lock)
+                    # TODO what to do now? if user wants to end
+                elif "end" in result or "stop" in result or "leave" in result:
+                    break
 
             # TODO
         time.sleep(5)
-
+    furhat.say("Thank you for spending time with me. Hope to see you next time! Have a great day!")
     #TODO save user happiness and stats
 
 def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
