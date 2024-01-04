@@ -115,14 +115,20 @@ def run_conversation_loop(name, furhat, queue):
                 furhat.say(text=reply)
                 result = furhat.listen() #TODO do sth with the result
                 first_interaction = False
-                was_happy = start_interaction_based_on_emotion(name, furhat, queue, em[0])
+                was_happy = start_interaction_based_on_emotion(name, furhat, queue, em[0], lock)
                 if not was_happy:
                     was_happy = offer_options(name, furhat, queue, lock)
                     # TODO what to do now? if user wants to end
             else:
-                furhat.say("Is there something else I can do for you? Do you want me to list you options of other exercises?")
+                furhat.say("Is there something else I can do for you?")
 
                 # TODO recommend based on emotion
+                wants_exercise_by_emotion = user_wants_to_do_exercise_based_on_emotion(em[0], done_exercises)
+                if wants_exercise_by_emotion:
+                    start_interaction_based_on_emotion(name, furhat, queue, em[0], lock)
+                    continue
+
+                furhat.say("Do you want me to list you options of other exercises?")
                 time.sleep(2)
                 result = furhat.listen()
                 result = result.message
@@ -138,7 +144,7 @@ def run_conversation_loop(name, furhat, queue):
     furhat.say("Thank you for spending time with me. Hope to see you next time! Have a great day!")
     #TODO save user happiness and stats
 
-def user_wants_to_do_exercise_based_on_emotion(name, furhat, queue, lock, emotion, done_exercises):
+def user_wants_to_do_exercise_based_on_emotion(emotion, done_exercises):
     match emotion:
         case 'fear':
             pass
@@ -166,7 +172,6 @@ def user_wants_to_do_exercise_based_on_emotion(name, furhat, queue, lock, emotio
                 return False
             else:
                 furhat.say("I would recommend mindfulness exercise for happiness. Do you want to start that?")
-            return mindfulness_exercise(name, furhat, lock, queue)
         case 'disgust':
             pass
 
