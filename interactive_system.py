@@ -112,25 +112,28 @@ def run_conversation_loop(name, furhat, queue):
             if first_interaction:
                 reply = START_EMOTION_REPLY.get(em[0])
                 furhat.say(text=reply)
+                result = furhat.listen() #TODO do sth with the result
                 first_interaction = False
                 start_interaction_based_on_emotion(name, furhat, queue, em[0])
         time.sleep(5)
 
-def start_interaction_based_on_emotion(name, furhat, queue, emotion):
-    if emotion == 'fear':
-        pass
-    if emotion == 'surprise':
-        pass
-    if emotion == 'angry':
-        pass
-    if emotion == 'happy':
-        pass
-    if emotion == 'sad':
-        pass
-    if emotion == 'neutral':
-        pass
-    if emotion == 'disgusted':
-        pass
+def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
+    match emotion:
+        case 'fear':
+            pass
+        case 'surprise':
+            pass
+        case 'angry':
+            breathing_excercice(name, furhat, lock, queue)
+        case 'happy':
+            meditation_for_happiness(name, furhat, lock, queue)
+        case 'sad':
+            say_comforting_story(furhat, lock, queue)
+            breathing_excercice(name, furhat, lock, queue)
+        case 'neutral':
+            mindfulness_exercise(name, furhat, lock, queue)
+        case 'disgust':
+            pass
 
 def get_an_emotion(queue, lock):
     with lock:
@@ -284,7 +287,7 @@ def breathing_excercice(name, furhat, lock, queue):
         furhat.say(text="Do you want to try something different?")
         # TODO sth different
 
-def say_camforting_story(furhat, lock, queue):
+def say_comforting_story(furhat, lock, queue):
     furhat.say("To understand you better, what happened? Is this work related or school related? Or about relationships?")
     caught_answer = False
 
