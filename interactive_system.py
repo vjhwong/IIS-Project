@@ -106,6 +106,7 @@ def run_conversation_loop(name, furhat, queue):
     lock = threading.Lock()
     conversation_ended = False
     first_interaction = True
+    done_exercises = [] #TODO fill list somewhere
     while not conversation_ended:
         em = get_an_emotion(queue, lock)
         if len(em) != 0 and (em[0] is not None or em[0] != ''):
@@ -136,6 +137,47 @@ def run_conversation_loop(name, furhat, queue):
         time.sleep(5)
     furhat.say("Thank you for spending time with me. Hope to see you next time! Have a great day!")
     #TODO save user happiness and stats
+
+def user_wants_to_do_exercise_based_on_emotion(name, furhat, queue, lock, emotion, done_exercises):
+    match emotion:
+        case 'fear':
+            pass
+            # TODO
+        case 'surprise':
+            pass
+            # TODO
+        case 'angry':
+            if breathing_excercice.__name__ in done_exercises:
+                return False
+            else:
+                furhat.say("I would recommend breathing exercise. Do you want to start that?")
+        case 'happy':
+            if meditation_for_happiness.__name__ in done_exercises:
+                return False
+            else:
+                furhat.say("I would recommend meditation for happiness. Do you want to start that?")
+        case 'sad':
+            if breathing_excercice.__name__ in done_exercises:
+                return False
+            else:
+                furhat.say("I would recommend breathing exercise for happiness. Do you want to start that?")
+        case 'neutral':
+            if mindfulness_exercise.__name__ in done_exercises:
+                return False
+            else:
+                furhat.say("I would recommend mindfulness exercise for happiness. Do you want to start that?")
+            return mindfulness_exercise(name, furhat, lock, queue)
+        case 'disgust':
+            pass
+
+    time.sleep(2)
+    result = furhat.listen()
+    result = result.message
+    if "don't start" in result or "stop" in result or "no" in result:
+        return False
+    else:
+        return True
+
 
 def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
     match emotion:
