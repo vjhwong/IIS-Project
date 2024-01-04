@@ -115,6 +115,9 @@ def run_conversation_loop(name, furhat, queue):
                 result = furhat.listen() #TODO do sth with the result
                 first_interaction = False
                 start_interaction_based_on_emotion(name, furhat, queue, em[0])
+            else:
+                pass
+                # TODO
         time.sleep(5)
 
 def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
