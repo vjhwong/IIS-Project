@@ -105,13 +105,32 @@ def is_name_and_password_valid(name,password):
 def run_conversation_loop(name, furhat, queue):
     lock = threading.Lock()
     conversation_ended = False
+    first_interaction = True
     while not conversation_ended:
         em = get_an_emotion(queue, lock)
         if len(em) != 0 and (em[0] is not None or em[0] != ''):
-            reply = START_EMOTION_REPLY.get(em[0])
-            furhat.say(text=reply)
+            if first_interaction:
+                reply = START_EMOTION_REPLY.get(em[0])
+                furhat.say(text=reply)
+                first_interaction = False
+                start_interaction_based_on_emotion(name, furhat, queue, em[0])
         time.sleep(5)
 
+def start_interaction_based_on_emotion(name, furhat, queue, emotion):
+    if emotion == 'fear':
+        pass
+    if emotion == 'surprise':
+        pass
+    if emotion == 'angry':
+        pass
+    if emotion == 'happy':
+        pass
+    if emotion == 'sad':
+        pass
+    if emotion == 'neutral':
+        pass
+    if emotion == 'disgusted':
+        pass
 
 def get_an_emotion(queue, lock):
     with lock:
@@ -122,7 +141,7 @@ def get_an_emotion(queue, lock):
     #if em is not None or em != '':
     return em
 
-def is_happy_by_emotion(queue, lock):
+def is_happy_by_emotion(queue, lock): #TODO add original emotion so that if person is angry at the beginning, it won't stop like this
     em = get_an_emotion(queue, lock)
     if len(em) != 0 and (em[0] is not None or em[0] != ''):
         if (em[0] == 'angry' or em[0] == 'disgust'):
