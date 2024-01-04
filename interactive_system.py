@@ -139,80 +139,88 @@ def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
             # TODO
 
 def offer_options(name, furhat, queue, lock):
-    once_more = False
-    furhat.say("I caught that you want to try something different. We can do:"
-               "breathing exercise, "
-               "meditation for happiness, "
-               "we can just talk, I can listen to what's on your mind and say few comforting words,"
-               "mindfulness exercises, I can list them if you'd like. "
-               "So, what will it be? If you'd like to leave, you can just tell me to stop.")
-    time.sleep(5)
-    # TODO tell more about each
-    result = furhat.listen()
+    picked_exercise = False
 
-    if "first" in result or "breathing exercise" in result:
-        furhat.say("Do you want to know more or start or try something different?")
-        if "option" in result or "choice" in result.message or "different" in result.message:
-            once_more = True
-        if "more" in result:
-            # TODO explain breathing exercise
-            pass
-        # leave option is done outside the if block
-    elif "second" in result or "meditation for happiness" in result or "meditation" in result or "happiness" in result:
-        furhat.say("Do you want to know more or start or try something different?")
-        if "option" in result or "choice" in result.message or "different" in result.message:
-            once_more = True
-        if "more" in result:
-            # TODO explain meditation
-            pass
-        # leave option is done outside the if block
-    elif "third" in result or "talk" in result or "listen" in result or "comforting" in result:
-        furhat.say("Do you want to know more or start or try something different?")
-        if "option" in result or "choice" in result.message or "different" in result.message:
-            once_more = True
-        if "more" in result:
-            # TODO explain listening and comforting
-            pass
-    elif "last" in result or "fifth" in result or "mindfulness exercise" in result or "list" in result:
-        furhat.say("Do you want to know more or start or try something different?")
-        if "option" in result or "choice" in result.message or "different" in result.message:
-            once_more = True
-        if "more" in result:
-            # TODO explain mindfulness exercise
-            pass
+    while not picked_exercise:
+        furhat.say("I caught that you want to try something different. We can do:"
+                   "breathing exercise, "
+                   "meditation for happiness, "
+                   "we can just talk, I can listen to what's on your mind and say few comforting words,"
+                   "mindfulness exercises, I can list them if you'd like. "
+                   "So, what will it be? If you'd like to leave, you can just tell me to stop.")
+        time.sleep(5)
+        # TODO tell more about each
+        result = furhat.listen()
 
-        picked_option = False
-        while not picked_option:
-            furhat.say("There are multiple exercises you can try. "
-                       "mindful breathing, body scan, five senses exercise, walking meditation, and gratitude list. "
-                       "Which one do you want to try?")
-            time.sleep(5)
-            result = furhat.listen()
-            if "first" in result or "mindful breathing" in result:
-                picked_option = True
-                mindful_breathing(furhat, lock, queue)
-            elif "second" in result or "body scan" in result:
-                picked_option = True
-                body_scan(furhat, lock, queue)
-            elif "third" in result or "five senses" in result:
-                picked_option = True
-                five_senses_exercise(furhat, lock, queue)
-            elif "fourth" in result or "walking meditation" in result:
-                picked_option = True
-                walking_meditation(furhat, lock, queue)
-            elif "last" in result or "fifth" in result or "gratitude list" in result:
-                picked_option = True
-                gratitude_list(furhat, lock, queue)
-            elif "again" in result:
+        if "first" in result or "breathing exercise" in result:
+            picked_exercise = True
+            furhat.say("Do you want to know more or start or try something different?")
+            if "option" in result or "choice" in result.message or "different" in result.message:
                 continue
+            if "more" in result:
+                # TODO explain breathing exercise
+                pass
+            # leave option is done outside the if block
+        elif "second" in result or "meditation for happiness" in result or "meditation" in result or "happiness" in result:
+            picked_exercise = True
+            furhat.say("Do you want to know more or start or try something different?")
+            if "option" in result or "choice" in result.message or "different" in result.message:
+                continue
+            if "more" in result:
+                # TODO explain meditation
+                pass
+            # leave option is done outside the if block
+        elif "third" in result or "talk" in result or "listen" in result or "comforting" in result:
+            picked_exercise = True
+            furhat.say("Do you want to know more or start or try something different?")
+            if "option" in result or "choice" in result.message or "different" in result.message:
+                continue
+            if "more" in result:
+                # TODO explain listening and comforting
+                pass
+        elif "last" in result or "fifth" in result or "mindfulness exercise" in result or "list" in result:
+            picked_exercise = True
+            furhat.say("Do you want to know more or start or try something different?")
+            if "option" in result or "choice" in result.message or "different" in result.message:
+                continue
+            if "more" in result:
+                # TODO explain mindfulness exercise
+                pass
 
-            furhat.say("Sorry, I didn't catch that. Let me repeat the options again.")
+            picked_option = False
+            while not picked_option:
+                furhat.say("There are multiple exercises you can try. "
+                           "mindful breathing, body scan, five senses exercise, walking meditation, and gratitude list. "
+                           "Which one do you want to try?")
+                time.sleep(5)
+                result = furhat.listen()
+                if "first" in result or "mindful breathing" in result:
+                    picked_option = True
+                    mindful_breathing(furhat, lock, queue)
+                elif "second" in result or "body scan" in result:
+                    picked_option = True
+                    body_scan(furhat, lock, queue)
+                elif "third" in result or "five senses" in result:
+                    picked_option = True
+                    five_senses_exercise(furhat, lock, queue)
+                elif "fourth" in result or "walking meditation" in result:
+                    picked_option = True
+                    walking_meditation(furhat, lock, queue)
+                elif "last" in result or "fifth" in result or "gratitude list" in result:
+                    picked_option = True
+                    gratitude_list(furhat, lock, queue)
+                elif "again" in result:
+                    continue
+                elif "stop" in result or "end" in result:
+                    break
+                else:
+                    furhat.say("I'm sorry, I didn't catch that. Let me repeat the options again.")
+        elif "leave" not in result or "stop" not in result or "end" not in result:
+            furhat.say("I'm sorry, I didn't catch that. Let me repeat the options again.")
 
-    if "leave" in result or "stop" in result or "end" in result:
-        pass
-        # TODO stop
-    if once_more:
-        offer_options(name, furhat, queue, lock)
+        if "leave" in result or "stop" in result or "end" in result:
+            break
+            # TODO stop
 
 def get_an_emotion(queue, lock):
     with lock:
