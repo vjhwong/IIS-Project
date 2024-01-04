@@ -139,6 +139,7 @@ def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
             # TODO
 
 def offer_options(name, furhat, queue, lock):
+    once_more = False
     furhat.say("I caught that you want to try something different. We can do:"
                "breathing exercise, "
                "meditation for happiness, "
@@ -150,16 +151,41 @@ def offer_options(name, furhat, queue, lock):
     result = furhat.listen()
 
     if "breathing exercise" in result:
-        pass
+        furhat.say("Do you want to know more or start or try something different?")
+        if "choice" in result.message or "different" in result.message:
+            once_more = True
+        if "more" in result:
+            # TODO explain breathing exercise
+            pass
+        # leave option is done outside the if block
     elif "meditation for happiness" in result or "meditation" in result or "happiness" in result:
-        pass
+        furhat.say("Do you want to know more or start or try something different?")
+        if "choice" in result.message or "different" in result.message:
+            once_more = True
+        if "more" in result:
+            # TODO explain meditation
+            pass
+        # leave option is done outside the if block
     elif "talk" in result or "listen" in result or "comforting" in result:
-        pass
-    elif "mindfulness exercises" in result or "list" in result:
-        pass
-    elif "leave" in result or "stop" in result or "end" in result:
+        furhat.say("Do you want to know more or start or try something different?")
+        if "choice" in result.message or "different" in result.message:
+            once_more = True
+        if "more" in result:
+            # TODO explain listening and comforting
+            pass
+    elif "mindfulness exercise" in result or "list" in result:
+        furhat.say("Do you want to know more or start or try something different?")
+        if "choice" in result.message or "different" in result.message:
+            once_more = True
+        if "more" in result:
+            # TODO explain mindfulness exercise
+            pass
+
+    if "leave" in result or "stop" in result or "end" in result:
         pass
         # TODO stop
+    if once_more:
+        offer_options(name, furhat, queue, lock)
 
 def get_an_emotion(queue, lock):
     with lock:
