@@ -181,6 +181,33 @@ def offer_options(name, furhat, queue, lock):
             # TODO explain mindfulness exercise
             pass
 
+        picked_option = False
+        while not picked_option:
+            furhat.say("There are multiple exercises you can try. "
+                       "mindful breathing, body scan, five senses exercise, walking meditation, and gratitude list. "
+                       "Which one do you want to try?")
+            time.sleep(5)
+            result = furhat.listen()
+            if "first" in result or "mindful breathing" in result:
+                picked_option = True
+                mindful_breathing(furhat, lock, queue)
+            elif "second" in result or "body scan" in result:
+                picked_option = True
+                body_scan(furhat, lock, queue)
+            elif "third" in result or "five senses" in result:
+                picked_option = True
+                five_senses_exercise(furhat, lock, queue)
+            elif "fourth" in result or "walking meditation" in result:
+                picked_option = True
+                walking_meditation(furhat, lock, queue)
+            elif "last" in result or "fifth" in result or "gratitude list" in result:
+                picked_option = True
+                gratitude_list(furhat, lock, queue)
+            elif "again" in result:
+                continue
+
+            furhat.say("Sorry, I didn't catch that. Let me repeat the options again.")
+
     if "leave" in result or "stop" in result or "end" in result:
         pass
         # TODO stop
