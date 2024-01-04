@@ -121,8 +121,10 @@ def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
     match emotion:
         case 'fear':
             pass
+            # TODO
         case 'surprise':
             pass
+            # TODO
         case 'angry':
             breathing_excercice(name, furhat, lock, queue)
         case 'happy':
@@ -134,6 +136,30 @@ def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
             mindfulness_exercise(name, furhat, lock, queue)
         case 'disgust':
             pass
+            # TODO
+
+def offer_options(name, furhat, queue, lock):
+    furhat.say("I caught that you want to try something different. We can do:"
+               "breathing exercise, "
+               "meditation for happiness, "
+               "we can just talk, I can listen to what's on your mind and say few comforting words,"
+               "mindfulness exercises, I can list them if you'd like. "
+               "So, what will it be? If you'd like to leave, you can just tell me to stop.")
+    time.sleep(5)
+    # TODO tell more about each
+    result = furhat.listen()
+
+    if "breathing exercise" in result:
+        pass
+    elif "meditation for happiness" in result or "meditation" in result or "happiness" in result:
+        pass
+    elif "talk" in result or "listen" in result or "comforting" in result:
+        pass
+    elif "mindfulness exercises" in result or "list" in result:
+        pass
+    elif "leave" in result or "stop" in result or "end" in result:
+        pass
+        # TODO stop
 
 def get_an_emotion(queue, lock):
     with lock:
