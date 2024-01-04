@@ -150,32 +150,32 @@ def offer_options(name, furhat, queue, lock):
     # TODO tell more about each
     result = furhat.listen()
 
-    if "breathing exercise" in result:
+    if "first" in result or "breathing exercise" in result:
         furhat.say("Do you want to know more or start or try something different?")
-        if "choice" in result.message or "different" in result.message:
+        if "option" in result or "choice" in result.message or "different" in result.message:
             once_more = True
         if "more" in result:
             # TODO explain breathing exercise
             pass
         # leave option is done outside the if block
-    elif "meditation for happiness" in result or "meditation" in result or "happiness" in result:
+    elif "second" in result or "meditation for happiness" in result or "meditation" in result or "happiness" in result:
         furhat.say("Do you want to know more or start or try something different?")
-        if "choice" in result.message or "different" in result.message:
+        if "option" in result or "choice" in result.message or "different" in result.message:
             once_more = True
         if "more" in result:
             # TODO explain meditation
             pass
         # leave option is done outside the if block
-    elif "talk" in result or "listen" in result or "comforting" in result:
+    elif "third" in result or "talk" in result or "listen" in result or "comforting" in result:
         furhat.say("Do you want to know more or start or try something different?")
-        if "choice" in result.message or "different" in result.message:
+        if "option" in result or "choice" in result.message or "different" in result.message:
             once_more = True
         if "more" in result:
             # TODO explain listening and comforting
             pass
-    elif "mindfulness exercise" in result or "list" in result:
+    elif "last" in result or "fifth" in result or "mindfulness exercise" in result or "list" in result:
         furhat.say("Do you want to know more or start or try something different?")
-        if "choice" in result.message or "different" in result.message:
+        if "option" in result or "choice" in result.message or "different" in result.message:
             once_more = True
         if "more" in result:
             # TODO explain mindfulness exercise
