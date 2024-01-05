@@ -57,8 +57,13 @@ def identification(furhat):
             while not identified:
                 name, password = listen_to_name_and_password(furhat)
                 if name is None:
-                    furhat.say(text="I didn't get that, can you repeat your name and a password?")
-                    time.sleep(1)
+                    furhat.say(text="I didn't get that, would you like to repeat it " \
+                                    "or do you want to create a new profile?")
+                    time.sleep(2)
+                    result = furhat.listen()
+                    if "repeat" in result.message or "again" in result.message:
+                        furhat.say(text="Please, identify yourself with a name and a password.")
+                        time.sleep(2)
                     continue
                 if is_name_and_password_valid(name,password):
                     identified = True
@@ -103,7 +108,7 @@ def user_wants_to_repeat_what_furhat_said(message):
 def listen_to_name_and_password(furhat):
     result = furhat.listen()
     print("message is : " + result.message)
-    if result.message is None or result.message == '':
+    if result.message is None or result.message == '' or len(result.message.split()) != 2:
         return None, None
     if ' ' not in result.message:
         return None, None
