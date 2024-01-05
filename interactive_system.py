@@ -16,6 +16,8 @@ START_EMOTION_REPLY = {
     'disgust' : ''
 }
 
+ANONYM_NAME = "Anonym"
+
 def set_furhat():
     furhat = FurhatRemoteAPI("localhost")
     voices = furhat.get_voices()
@@ -48,16 +50,16 @@ def furhat_interaction(emotion, furhat):
 def identification(furhat):
     answered = False
     while not answered:
-        furhat.say(text="Do you have an identification?")
+        furhat.say(text="You can skip the identification process and enter anonymous mode. Do you already have a profile and identification?")
         result = furhat.listen()
         identified = False
         name = ''
 
-        if "skip" in result.message:
+        if "skip" in result.message or "anonymous" in result.message or "anonym" in result.message:
             # for testing purposes as well as the user might want to enter anonymous mode
-            return "Eve"
+            return ANONYM_NAME
 
-        if "yes" in result.message:
+        if "yes" in result.message or "identification" in result.message or "have a profile" in result.message or "identify" in result.message:
             furhat.say(text="Please, identify yourself with a name and a password.")
             # TODO we could just keep name, but then if there were two Eves in a family and one would already use it, furhat would tell she uses it already which sounds like a gdpr problem
             time.sleep(2)
@@ -95,6 +97,11 @@ def identification(furhat):
             name, password = listen_to_name_and_password(furhat)
             if name is None:
                 furhat.say(text="I didn't get that, can you repeat it?")
+                time.sleep(1)
+                continue
+
+            if name == ANONYM_NAME:
+                furhat.say(text="You can't enter this name, pick a different one.")
                 time.sleep(1)
                 continue
 
