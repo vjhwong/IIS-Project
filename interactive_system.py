@@ -457,7 +457,7 @@ def breathing_excercice(name, furhat, lock, queue):
 
     iteration = 1
     for i in range(5):
-        result = furhat.listen(timeout=1 * 60000)
+        result = furhat.listen(timeout=60)
         if result != '':
             furhat.say(text="Do you want to stop?")
             result = furhat.listen()
@@ -721,7 +721,7 @@ def meditation_for_happiness(name, furhat, lock, queue):
     if stopped:
         return
 
-    result = furhat.listen(timeout = 5*60000)
+    result = furhat.listen(timeout = 5*60)
     if result != '':
         furhat.say(text="Do you want to stop?")
         result = furhat.listen()
