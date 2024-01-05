@@ -60,11 +60,11 @@ def identification(furhat):
                 identified = True
                 furhat.say(text="Hello " + name + ". Welcome back! I'm happy to see you.")
             else:
-                furhat.say(text="I'm sorry, I don’t seem to know " + name + " with that id, can you repeat it? " \
-                                "Otherwise, a new profile will be created")
+                furhat.say(text="I'm sorry, I don’t seem to know " + name + " with that password, would you like to repeat it " \
+                                "or do you want to create a new profile?")
                 time.sleep(2)
                 result = furhat.listen()
-                if "yes" in result.message:
+                if "repeat" in result.message or "again" in result.message:
                     furhat.say(text="Please, identify yourself with a name and a password.")
                     time.sleep(2)
     if not identified:
