@@ -2,6 +2,7 @@ import numpy
 from furhat_remote_api import FurhatRemoteAPI
 import time
 import threading
+import password_manager
 
 global furhat
 
@@ -58,6 +59,7 @@ def identification(furhat):
 
         if "yes" in result.message:
             furhat.say(text="Please, identify yourself with a name and a password.")
+            # TODO we could just keep name, but then if there were two Eves in a family and one would already use it, furhat would tell she uses it already which sounds like a gdpr problem
             time.sleep(2)
             while not identified:
                 name, password = listen_to_name_and_password(furhat)
@@ -95,9 +97,25 @@ def identification(furhat):
                 furhat.say(text="I didn't get that, can you repeat it?")
                 time.sleep(1)
                 continue
-            save_name_and_password(name, password)
-            furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.") #TODO check if the name is correct
-            identified = True
+
+            if password_manager.is_username_already_stored(name):
+                furhat.say(text="A profile with this name already exists. Pick another version of your name that will be used for your identification."
+                                "Don't forget to remember it.")
+                furhat.say(text="Tell me your name and password you want to use for your identification. "
+                                "Say it slow in order name and password")
+                time.sleep(5)
+
+            furhat.say("I understood " + name + " with " + password + " as a password. Is this correct?")
+            time.sleep(2)
+            result = furhat.listen()
+            if "yes" in result.message or "it is correct" in result.message:
+                save_name_and_password(name, password)
+                furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.") #TODO check if the name is correct
+                identified = True
+            else:
+                furhat.say("You didn't say it was correct. "
+                           "Could you please tell me your name and password you want to use for your identification again?"
+                            "Say it slow in order name and password.")
         return name
 
 def furhat_should_repeat_itself(message):
@@ -124,10 +142,10 @@ def listen_to_name_and_password(furhat):
     return name, password
 
 def save_name_and_password(name, password):
-    pass
+    password_manager.save_username_and_password(name, password)
 
 def is_name_and_password_valid(name,password):
-    return True
+    return password_manager.validate_password(name, password)
 
 def run_conversation_loop(name, furhat, queue):
     time.sleep(5)
