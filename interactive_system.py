@@ -42,46 +42,63 @@ def furhat_interaction(emotion, furhat):
         #else:
         #    furhat.say(text="Hello! How can I help you today?")
 
+# TODO if user doesn't understand, repeat what furhat said
+
 def identification(furhat):
-    furhat.say(text="Do you have an identification?")
-    result = furhat.listen()
-    identified = False
-    name = ''
-    if "yes" in result.message:
-        furhat.say(text="Please, identify yourself with a name and a password.")
-        time.sleep(2)
+    answered = False
+    while not answered:
+        furhat.say(text="Do you have an identification?")
+        result = furhat.listen()
+        identified = False
+        name = ''
+        if "yes" in result.message:
+            furhat.say(text="Please, identify yourself with a name and a password.")
+            time.sleep(2)
+            while not identified:
+                name, password = listen_to_name_and_password(furhat)
+                if name is None:
+                    furhat.say(text="I didn't get that, can you repeat your name and a password?")
+                    time.sleep(1)
+                    continue
+                if is_name_and_password_valid(name,password):
+                    identified = True
+                    furhat.say(text="Hello " + name + ". Welcome back! I'm happy to see you.")
+                else:
+                    furhat.say(text="I'm sorry, I don’t seem to know " + name + " with that password, would you like to repeat it " \
+                                    "or do you want to create a new profile?")
+                    time.sleep(2)
+                    result = furhat.listen()
+                    if "repeat" in result.message or "again" in result.message:
+                        furhat.say(text="Please, identify yourself with a name and a password.")
+                        time.sleep(2)
+        else:
+            if furhat_should_repeat_itself(result.message):
+                continue
+        if not identified:
+            furhat.say(text="Let's create a new profile for you. "
+                            "Tell me your name and password you want to use for your identification. "
+                            "Say it slow in order name and password")
+            time.sleep(5)
         while not identified:
             name, password = listen_to_name_and_password(furhat)
             if name is None:
                 furhat.say(text="I didn't get that, can you repeat it?")
                 time.sleep(1)
                 continue
-            if is_name_and_password_valid(name,password):
-                identified = True
-                furhat.say(text="Hello " + name + ". Welcome back! I'm happy to see you.")
-            else:
-                furhat.say(text="I'm sorry, I don’t seem to know " + name + " with that password, would you like to repeat it " \
-                                "or do you want to create a new profile?")
-                time.sleep(2)
-                result = furhat.listen()
-                if "repeat" in result.message or "again" in result.message:
-                    furhat.say(text="Please, identify yourself with a name and a password.")
-                    time.sleep(2)
-    if not identified:
-        furhat.say(text="Let's create a new profile for you. "
-                        "Tell me your name and password you want to use for your identification. "
-                        "Say it slow in order name and password")
-        time.sleep(5)
-    while not identified:
-        name, password = listen_to_name_and_password(furhat)
-        if name is None:
-            furhat.say(text="I didn't get that, can you repeat it?")
-            time.sleep(1)
-            continue
-        save_name_and_password(name, password)
-        furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.") #TODO check if the name is correct
-        identified = True
-    return name
+            save_name_and_password(name, password)
+            furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.") #TODO check if the name is correct
+            identified = True
+        return name
+
+def furhat_should_repeat_itself(message):
+    if message == '' or user_wants_to_repeat_what_furhat_said(message):
+        return True
+    return False
+
+def user_wants_to_repeat_what_furhat_said(message):
+    if "what" in message or "say it again" in message or "can you repeat it" in message or "repeat yourself" in message:
+        return True
+    return  False
 
 def listen_to_name_and_password(furhat):
     result = furhat.listen()
