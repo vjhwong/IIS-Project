@@ -240,12 +240,17 @@ def offer_options(name, furhat, queue, lock):
     picked_exercise = False
 
     while not picked_exercise:
-        furhat.say(text="I caught that you want to try something different. We can do: " \
-                   "breathing exercise, " \
-                   "meditation for happiness, " \
-                   "we can just talk, I can listen to what's on your mind and say few comforting words," \
-                   "mindfulness exercises, I can list them if you'd like. " \
-                   "So, what will it be? If you'd like to leave, you can just tell me to stop.")
+        furhat.say(text="I caught that you want to try something different. We can do: ")
+        time.sleep(1)
+        furhat.say("breathing exercise, ")
+        time.sleep(1)
+        furhat.say(text="meditation for happiness, ")
+        time.sleep(1)
+        furhat.say(text="we can just talk, I can listen to what's on your mind and say few comforting words,")
+        time.sleep(1)
+        furhat.say(text="mindfulness exercises, I can list them if you'd like. ")
+        time.sleep(1)
+        furhat.say(text="So, what will it be? If you'd like to leave, you can just tell me to stop.")
         time.sleep(5)
         # TODO tell more about each
         result = furhat.listen()
@@ -316,12 +321,14 @@ def offer_options(name, furhat, queue, lock):
                     break
                 else:
                     furhat.say(text="I'm sorry, I didn't catch that. Let me repeat the options again.")
+                time.sleep(5)
         elif "leave" not in result or "stop" not in result or "end" not in result:
             furhat.say(text="I'm sorry, I didn't catch that. Let me repeat the options again.")
 
         if "leave" in result or "stop" in result or "end" in result:
             break
             # TODO stop
+        time.sleep(5)
 
 def get_an_emotion(queue, lock):
     with lock:
@@ -608,6 +615,7 @@ def say_comforting_story(furhat, lock, queue):
 def meditation_for_happiness(name, furhat, lock, queue):
     #https://jackcanfield.com/blog/happiness-meditation/
     furhat.say(text="Here's a simple guided meditation for happiness. Can we start? ")
+    time.sleep(2)
     result = furhat.listen()
     if "yes" in result.message:
         furhat.say(text="Let's start. If you wish to stop at any time, you can just say so.")
@@ -645,6 +653,7 @@ def meditation_for_happiness(name, furhat, lock, queue):
         return
 
     furhat.say(text="Your mind should be quiet now. Let's thank to what you're experiencing.")
+    time.sleep(2)
     furhat.say(text="Give thanks to your mind, which allows you to think of all your thoughts. ")
     time.sleep(2)
     stopped = stopped_if_user_wants_to_stop(queue, lock)
@@ -740,6 +749,7 @@ def meditation_for_happiness(name, furhat, lock, queue):
 
 def mindfulness_exercise(name, furhat, lock, queue):
     furhat.say(text="Here's a simple guided mindfulness exercise. Can we start? ")
+    time.sleep(2)
     result = furhat.listen()
     if "yes" in result.message:
         furhat.say(text="Let's start. If you wish to stop at any time, you can just say so.")
