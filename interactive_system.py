@@ -120,7 +120,7 @@ def run_conversation_loop(name, furhat, queue):
                     was_happy = offer_options(name, furhat, queue, lock)
                     # TODO what to do now? if user wants to end
             else:
-                furhat.say("Is there something else I can do for you?")
+                furhat.say("Is there anything else I can do for you?")
 
                 # TODO recommend based on emotion
                 wants_exercise_by_emotion = user_wants_to_do_exercise_based_on_emotion(em[0], done_exercises)
