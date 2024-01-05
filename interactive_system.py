@@ -51,6 +51,11 @@ def identification(furhat):
         result = furhat.listen()
         identified = False
         name = ''
+
+        if "skip" in result.message:
+            # for testing purposes as well as the user might want to enter anonymous mode
+            return "Eve"
+
         if "yes" in result.message:
             furhat.say(text="Please, identify yourself with a name and a password.")
             time.sleep(2)
@@ -101,7 +106,7 @@ def furhat_should_repeat_itself(message):
     return False
 
 def user_wants_to_repeat_what_furhat_said(message):
-    if "what" in message or "say it again" in message or "can you repeat it" in message or "repeat yourself" in message:
+    if "what" in message or "sorry" in message or "say it again" in message or "can you repeat it" in message or "repeat yourself" in message:
         return True
     return  False
 
@@ -125,6 +130,7 @@ def is_name_and_password_valid(name,password):
     return True
 
 def run_conversation_loop(name, furhat, queue):
+    time.sleep(5)
     lock = threading.Lock()
     conversation_ended = False
     first_interaction = True
@@ -134,6 +140,7 @@ def run_conversation_loop(name, furhat, queue):
         if len(em) != 0 and (em[0] is not None or em[0] != ''):
             if first_interaction:
                 reply = START_EMOTION_REPLY.get(em[0])
+                time.sleep(2)
                 furhat.say(text=reply)
                 result = furhat.listen() #TODO do sth with the result
                 first_interaction = False
@@ -207,6 +214,8 @@ def user_wants_to_do_exercise_based_on_emotion(emotion, done_exercises):
 
 
 def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
+    furhat.say("I will pick an exercise specifically selected for you right now.")
+    time.sleep(2)
     match emotion:
         case 'fear':
             pass
@@ -231,11 +240,11 @@ def offer_options(name, furhat, queue, lock):
     picked_exercise = False
 
     while not picked_exercise:
-        furhat.say("I caught that you want to try something different. We can do:"
-                   "breathing exercise, "
-                   "meditation for happiness, "
-                   "we can just talk, I can listen to what's on your mind and say few comforting words,"
-                   "mindfulness exercises, I can list them if you'd like. "
+        furhat.say("I caught that you want to try something different. We can do: " \
+                   "breathing exercise, " \
+                   "meditation for happiness, " \
+                   "we can just talk, I can listen to what's on your mind and say few comforting words," \
+                   "mindfulness exercises, I can list them if you'd like. " \
                    "So, what will it be? If you'd like to leave, you can just tell me to stop.")
         time.sleep(5)
         # TODO tell more about each
