@@ -442,6 +442,7 @@ def breathing_excercice(name, furhat, lock, queue):
         return
     furhat.say(
         text="Breathe in gently and regularly. Some people find it helpful to count steadily from 1 to 5. You may not be able to reach 5 at first.")
+
     time.sleep(2)
     stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
     if stopped:
@@ -452,8 +453,29 @@ def breathing_excercice(name, furhat, lock, queue):
     stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
     if stopped:
         return
+    furhat.say(text="But let's try it together. Breath in.")
+
+    furhat.say(text="One")
+    time.sleep(1)
+    furhat.say(text="Two")
+    time.sleep(1)
+    furhat.say(text="Three")
+    time.sleep(1)
+    furhat.say(text="Four")
+    time.sleep(1)
+    furhat.say(text="Five. Now breath out.")
+    furhat.say(text="One")
+    time.sleep(1)
+    furhat.say(text="Two")
+    time.sleep(1)
+    furhat.say(text="Three")
+    time.sleep(1)
+    furhat.say(text="Four")
+    time.sleep(1)
+    furhat.say(text="Five")
+
     furhat.say(
-        text="Now, repeat this for at least five minutes. I will be notifying you about the time")
+        text="Now, repeat this for at least five minutes. I will be notifying you about the time, after each minute passes")
 
     iteration = 1
     for i in range(5):
