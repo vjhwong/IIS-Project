@@ -874,9 +874,13 @@ def mindfulness_exercise(name, furhat, lock, queue):
         furhat.say(
             text="I caught that you don't want to do this. Do you want to try something different?")  # TODO something different
 
-    #TODO add actual mindfulness exercises here
+    furhat.say("Let me list all mindfulness exercises for you and then you can pick one")
 
-    return did_session_help(furhat)
+    was_happy = list_mindfulness_exercise_and_let_pick(furhat, lock, queue)
+    if was_happy:
+        return did_session_help(furhat)
+    else:
+        return False
 
 def mindful_breathing(furhat, lock, queue):
     # https://www.verywellhealth.com/mindfulness-exercises-5204406 and https://www.healthline.com/health/box-breathing#hold-your-breath
