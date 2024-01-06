@@ -244,10 +244,10 @@ def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
     time.sleep(2)
     match emotion:
         case 'fear':
-            return False
+            return mindfulness_exercise(name, furhat, lock, queue)
             # TODO
         case 'surprise':
-            return False
+            return mindfulness_exercise(name, furhat, lock, queue)
             # TODO
         case 'angry':
             return breathing_excercice(name, furhat, lock, queue)
@@ -259,7 +259,7 @@ def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
         case 'neutral':
             return mindfulness_exercise(name, furhat, lock, queue)
         case 'disgust':
-            return False
+            return mindfulness_exercise(name, furhat, lock, queue)
             # TODO
 
 def offer_options(name, furhat, queue, lock):
