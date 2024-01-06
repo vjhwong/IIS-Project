@@ -43,7 +43,9 @@ def furhat_interaction(emotion, furhat):
 def identification(furhat):
     answered = False
     while not answered:
-        furhat.say(text="You can skip the identification process and enter anonymous mode. Do you already have a profile and identification?")
+        furhat.say(text="You can skip the identification process and enter an anonymous mode.")
+        time.sleep(1)
+        furhat.say(text="Do you already have a profile and identification?")
         result = furhat.listen()
         identified = False
         name = ''
@@ -105,7 +107,7 @@ def identification(furhat):
                                 "Say it slow in order name and password")
                 time.sleep(5)
 
-            furhat.say("I understood " + name + " with " + password + " as a password. Is this correct?")
+            furhat.say(text="I understood " + name + " with " + password + " as a password. Is this correct?")
             time.sleep(2)
             result = furhat.listen()
             if "yes" in result.message or "correct" in result.message and "not correct" not in result.message and "isn't correct" not in result.message:
@@ -113,7 +115,7 @@ def identification(furhat):
                 furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.")
                 identified = True
             else:
-                furhat.say("You didn't say it was correct. "
+                furhat.say(text="You didn't say it was correct. "
                            "Could you please tell me your name and password you want to use for your identification again?"
                             "Say it slow in order name and password.")
         return name
@@ -196,7 +198,7 @@ def run_conversation_loop(name, furhat, queue):
 def ask_if_offer_option_or_end(furhat):
     answered = False
     while not answered:
-        furhat.say("Do you want to see other options? Or do you want to end this session?")
+        furhat.say(text="Do you want to see other options? Or do you want to end this session?")
         result = furhat.listen()
         stop_in_response = was_stop_word_in_response(result.message)
         if stop_in_response:
@@ -211,7 +213,7 @@ def ask_if_offer_option_or_end(furhat):
 
 def end_session(furhat, queue):
     # TODO save user happiness and stats
-    furhat.say("You decided to end this session. Thank you for spending time with me today. I'll see you next time. Have a great day!")
+    furhat.say(text="You decided to end this session. Thank you for spending time with me today. I'll see you next time. Have a great day!")
     queue.queue.clear()
     queue.put(STOP)
 
@@ -311,7 +313,7 @@ def offer_options(name, furhat, queue, lock):
     while not picked_exercise:
         furhat.say(text="I caught that you want to try something different. We can do: ")
         time.sleep(1)
-        furhat.say("breathing exercise, ")
+        furhat.say(text="breathing exercise, ")
         time.sleep(1)
         furhat.say(text="meditation for happiness, ")
         time.sleep(1)
@@ -863,7 +865,7 @@ def mindfulness_exercise(name, furhat, lock, queue):
     if "no" in result.message:
         return False
 
-    furhat.say("Let me list all mindfulness exercises for you and then you can pick one")
+    furhat.say(text="Let me list all mindfulness exercises for you and then you can pick one")
 
     was_happy = list_mindfulness_exercise_and_let_pick(furhat, lock, queue)
     if was_happy:
@@ -941,25 +943,25 @@ def gratitude_list(furhat, lock, queue):
 
 def observe_with_eyes_closed(furhat, lock, queue):
     #https://www.fearlessculture.design/blog-posts/21-simple-mindfulness-exercises-to-improve-your-focus
-    furhat.say("Sometimes, the best way to remove a distraction is to stop seeing it.")
+    furhat.say(text="Sometimes, the best way to remove a distraction is to stop seeing it.")
     time.sleep(1)
-    furhat.say("This exercise is ideal to practice in public space.")
+    furhat.say(text="This exercise is ideal to practice in public space.")
     time.sleep(1)
-    furhat.say("Now, close your eyes.")
+    furhat.say(text="Now, close your eyes.")
     time.sleep(1)
-    furhat.say("Take a deep breath and relax.")
+    furhat.say(text="Take a deep breath and relax.")
     time.sleep(1)
-    furhat.say("Focus on what's going on around you. First, pay attention to the sounds that are closer to you.")
+    furhat.say(text="Focus on what's going on around you. First, pay attention to the sounds that are closer to you.")
     time.sleep(1)
-    furhat.say("What do you hear?")
+    furhat.say(text="What do you hear?")
     time.sleep(15)
-    furhat.say("Little by little, start focusing on the sounds that are farther away.")
+    furhat.say(text="Little by little, start focusing on the sounds that are farther away.")
     time.sleep(15)
-    furhat.say("Now, pay attention to what’s going on right next to you. What sounds do you hear? Can you hear voices? What are they saying?")
+    furhat.say(text="Now, pay attention to what’s going on right next to you. What sounds do you hear? Can you hear voices? What are they saying?")
     time.sleep(15)
-    furhat.say("Now repeat the same routine with the more distant noises, sounds, and voices. Remember that you are trying to understand, not to analyze, what’s happening.")
+    furhat.say(text="Now repeat the same routine with the more distant noises, sounds, and voices. Remember that you are trying to understand, not to analyze, what’s happening.")
     time.sleep(15)
-    furhat.say("Whenever you're ready, open your eyes and tell me to stop.")
+    furhat.say(text="Whenever you're ready, open your eyes and tell me to stop.")
 
     interrupted = False
     while not interrupted:
