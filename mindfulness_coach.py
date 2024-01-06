@@ -45,7 +45,6 @@ if __name__ == "__main__":
     time.sleep(3)
     furhat_interaction.start()
 
-    detect_faces.stop()
     detect_faces_thread.join()
     furhat_interaction.join()
 

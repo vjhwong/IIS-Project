@@ -42,16 +42,20 @@ def furhat_interaction(emotion, furhat):
 
 def identification(furhat):
     answered = False
+    name = ''
     while not answered:
         furhat.say(text="You can skip the identification process and enter an anonymous mode.")
-        time.sleep(1)
+        time.sleep(2)
         furhat.say(text="Do you already have a profile and identification?")
+        time.sleep(2)
         result = furhat.listen()
+        print("message was:" + result.message)
+        if result.message == '':
+            result = furhat.listen()
         identified = False
-        name = ''
 
         if "skip" in result.message or "anonymous" in result.message or "anonym" in result.message:
-            # for testing purposes as well as the user might want to enter anonymous mode
+            furhat.say(text="You decided to enter an anonymous mode. Welcome.")
             return ANONYM_NAME
 
         if "yes" in result.message or "identification" in result.message or "have a profile" in result.message or "identify" in result.message:
@@ -82,6 +86,7 @@ def identification(furhat):
                         time.sleep(2)
         else:
             if furhat_should_repeat_itself(result.message):
+                time.sleep(2)
                 continue
         if not identified:
             furhat.say(text="Let's create a new profile for you. "
@@ -118,7 +123,7 @@ def identification(furhat):
                 furhat.say(text="You didn't say it was correct. "
                            "Could you please tell me your name and password you want to use for your identification again?"
                             "Say it slow in order name and password.")
-        return name
+    return name
 
 def furhat_should_repeat_itself(message):
     if message == '' or user_wants_to_repeat_what_furhat_said(message):
@@ -286,7 +291,7 @@ def user_wants_to_do_exercise_based_on_emotion(emotion, done_exercises):
 
 def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
     furhat.say(text="I will pick an exercise specifically selected for you right now.")
-    time.sleep(2)
+    time.sleep(5)
     match emotion:
         case 'fear':
             return mindfulness_exercise(name, furhat, lock, queue)
@@ -312,20 +317,20 @@ def offer_options(name, furhat, queue, lock):
 
     while not picked_exercise:
         furhat.say(text="I caught that you want to try something different. We can do: ")
-        time.sleep(1)
+        time.sleep(2)
         furhat.say(text="breathing exercise, ")
-        time.sleep(1)
+        time.sleep(2)
         furhat.say(text="meditation for happiness, ")
-        time.sleep(1)
+        time.sleep(2)
         furhat.say(text="we can just talk, I can listen to what's on your mind and say few comforting words,")
-        time.sleep(1)
+        time.sleep(2)
         furhat.say(text="mindfulness exercises, I can list them if you'd like. ")
-        time.sleep(1)
+        time.sleep(2)
         furhat.say(text="So, what will it be? If you'd like to leave, you can just tell me to stop.")
         time.sleep(5)
         # TODO tell more about each
-        result = furhat.listen()
-        result = result.message
+        answer = furhat.listen()
+        result = answer.message
         if "first" in result or "breathing exercise" in result:
             picked_exercise = True
             furhat.say(text="Do you want to know more or start or try something different?")
@@ -363,7 +368,7 @@ def offer_options(name, furhat, queue, lock):
             if "more" in result:
                 # TODO explain mindfulness exercise
                 pass
-            list_mindfulness_exercise_and_let_pick(furhat, lock, queue)
+            return list_mindfulness_exercise_and_let_pick(furhat, lock, queue)
 
         elif "leave" not in result or "stop" not in result or "end" not in result:
             furhat.say(text="I'm sorry, I didn't catch that. Let me repeat the options again.")
@@ -379,8 +384,9 @@ def list_mindfulness_exercise_and_let_pick(furhat, lock, queue):
         furhat.say(text="There are multiple exercises you can try. "
                         "mindful breathing, body scan, five senses exercise, walking meditation, observe with eyes closed, and gratitude list. "
                         "Which one do you want to try?")
-        time.sleep(5)
+        time.sleep(15)
         result = furhat.listen()
+        result = result.message
         if "first" in result or "mindful breathing" in result:
             picked_option = True
             return mindful_breathing(furhat, lock, queue)
@@ -852,19 +858,6 @@ def meditation_for_happiness(name, furhat, lock, queue):
     return did_session_help(furhat, meditation_for_happiness.__name__)
 
 def mindfulness_exercise(name, furhat, lock, queue):
-    furhat.say(text="Here's a simple guided mindfulness exercise. Can we start? ")
-    time.sleep(2)
-    result = furhat.listen()
-    if "yes" in result.message:
-        furhat.say(text="Let's start. If you wish to stop at any time, you can just say so.")
-        time.sleep(2)
-    if "how long" in result.message:
-        furhat.say(text="This exercise takes about 10 minutes.")
-    if "other choice" in result.message or "something different" in result.message:
-        return False
-    if "no" in result.message:
-        return False
-
     furhat.say(text="Let me list all mindfulness exercises for you and then you can pick one")
 
     was_happy = list_mindfulness_exercise_and_let_pick(furhat, lock, queue)
@@ -874,6 +867,8 @@ def mindfulness_exercise(name, furhat, lock, queue):
         return False
 
 def mindful_breathing(furhat, lock, queue):
+    furhat.say(text="Let's start the mindful breathing exercise")
+    time.sleep(2)
     # https://www.verywellhealth.com/mindfulness-exercises-5204406 and https://www.healthline.com/health/box-breathing#hold-your-breath
 
     furhat.say(text="This technique can be beneficial to anyone, especially those who want to meditate or reduce stress.")
@@ -899,6 +894,8 @@ def mindful_breathing(furhat, lock, queue):
     return did_session_help(furhat, mindful_breathing.__name__)
 
 def body_scan(furhat, lock, queue):
+    furhat.say(text="Let's start the body scan exercise")
+    time.sleep(2)
     #https://www.mayoclinic.org/healthy-lifestyle/consumer-health/in-depth/mindfulness-exercises/art-20046356
     furhat.say(text="Lie on your back with your legs extended and arms at your sides, palms facing up.")
     furhat.say(text="Focus your attention slowly and deliberately on each part of your body, in order, from toe to head or head to toe. Be aware of any sensations, emotions or thoughts associated with each part of your body.")
@@ -907,6 +904,8 @@ def body_scan(furhat, lock, queue):
     return did_session_help(furhat, body_scan.__name__)
 
 def five_senses_exercise(furhat, lock, queue):
+    furhat.say(text="Let's start the five senses exercise exercise")
+    time.sleep(2)
     #https://www.verywellhealth.com/mindfulness-exercises-5204406
     furhat.say(text="Notice five things you can see.")
     time.sleep(5)
@@ -923,6 +922,8 @@ def five_senses_exercise(furhat, lock, queue):
 
 
 def walking_meditation(furhat, lock, queue):
+    furhat.say(text="Let's start the owalking meditation exercise")
+    time.sleep(2)
     #https://www.mayoclinic.org/healthy-lifestyle/consumer-health/in-depth/mindfulness-exercises/art-20046356
     furhat.say(text="Find a quiet place 10 to 20 feet in length, and begin to walk slowly. "
                "Focus on the experience of walking, being aware of the sensations of standing and the subtle movements that keep your balance. When you reach the end of your path, turn and continue walking, maintaining awareness of your sensations.")
@@ -942,17 +943,19 @@ def gratitude_list(furhat, lock, queue):
     return did_session_help(furhat, gratitude_list.__name__)
 
 def observe_with_eyes_closed(furhat, lock, queue):
+    furhat.say(text = "Let's start the observe with eyes closed exercise")
+    time.sleep(2)
     #https://www.fearlessculture.design/blog-posts/21-simple-mindfulness-exercises-to-improve-your-focus
     furhat.say(text="Sometimes, the best way to remove a distraction is to stop seeing it.")
-    time.sleep(1)
+    time.sleep(2)
     furhat.say(text="This exercise is ideal to practice in public space.")
-    time.sleep(1)
+    time.sleep(2)
     furhat.say(text="Now, close your eyes.")
-    time.sleep(1)
+    time.sleep(2)
     furhat.say(text="Take a deep breath and relax.")
-    time.sleep(1)
+    time.sleep(2)
     furhat.say(text="Focus on what's going on around you. First, pay attention to the sounds that are closer to you.")
-    time.sleep(1)
+    time.sleep(2)
     furhat.say(text="What do you hear?")
     time.sleep(15)
     furhat.say(text="Little by little, start focusing on the sounds that are farther away.")
