@@ -76,6 +76,7 @@ with open(csv_path, 'w', newline='') as csv_file:
                     aus_now = aus_array[i]
                     csv_writer.writerow([image_path]+[i]+[valence]+[emotion_label] + list(aus_now))
 
+
 data=pd.read_csv(csv_path)
 
 labels=data['valence']
