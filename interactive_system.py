@@ -710,7 +710,7 @@ def say_comforting_story(furhat, lock, queue):
                 furhat.say(
                     "I understand. That is a difficult situation. But remember, challenges are what make life interesting"
                     "and overcoming them is what makes life meaningful.")
-        elif was_stop_word_in_response(result)
+        elif was_stop_word_in_response(result):
             return False
         else:
             furhat.say(
