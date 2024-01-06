@@ -20,6 +20,7 @@ ANONYM_NAME = "Anonym"
 REPEAT_MESSAGE = "I couldn't catch that, let me repeat myself."
 OTHER_OPTION = 'other option'
 END = 'end'
+STOP = 'STOP'
 
 def set_furhat():
     furhat = FurhatRemoteAPI("localhost")
@@ -220,10 +221,11 @@ def ask_if_offer_option_or_end(furhat):
         else:
             furhat.say(REPEAT_MESSAGE)
 
-def end_session(furhat):
+def end_session(furhat, queue):
     # TODO save user happiness and stats
     furhat.say("You decided to end this session. Thank you for spending time with me today. I'll see you next time. Have a great day!")
-
+    queue.queue.clear()
+    queue.put(STOP)
 
 def offer_option_and_end_session_if_user_not_happy(name, furhat, queue, lock):
     session_should_end = False
