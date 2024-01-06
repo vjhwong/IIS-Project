@@ -36,19 +36,7 @@ def furhat_interaction(emotion, furhat):
         #remember that is an array
         if len(emotion) != 0:
             emotion = emotion[0]
-
-        #print(emotion)
-        #if emotion == "happy":
-        #    furhat.say(text="You look happy.")
-        #elif emotion == "sad":
-        #    furhat.say(text="You look sad.")
-        #elif emotion == "angry":
-        #    furhat.say(text="You look angry.")
-        #elif emotion == "neutral":
-        #    furhat.say(text="How are you feeling?")
-        #else:
-        #    furhat.say(text="Hello! How can I help you today?")
-
+            
 # TODO if user doesn't understand, repeat what furhat said
 
 def identification(furhat):
