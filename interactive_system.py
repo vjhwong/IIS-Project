@@ -119,9 +119,9 @@ def identification(furhat):
             furhat.say("I understood " + name + " with " + password + " as a password. Is this correct?")
             time.sleep(2)
             result = furhat.listen()
-            if "yes" in result.message or "it is correct" in result.message:
+            if "yes" in result.message or "correct" in result.message and "not correct" not in result.message and "isn't correct" not in result.message:
                 save_name_and_password(name, password)
-                furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.") #TODO check if the name is correct
+                furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.")
                 identified = True
             else:
                 furhat.say("You didn't say it was correct. "
@@ -199,7 +199,6 @@ def run_conversation_loop(name, furhat, queue):
                 elif "end" in result or "stop" in result or "leave" in result:
                     break
 
-            # TODO
         time.sleep(5)
     furhat.say(text="Thank you for spending time with me. Hope to see you next time! Have a great day!")
     end_session(furhat)
@@ -300,22 +299,22 @@ def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
     match emotion:
         case 'fear':
             return mindfulness_exercise(name, furhat, lock, queue)
-            # TODO
         case 'surprise':
             return mindfulness_exercise(name, furhat, lock, queue)
-            # TODO
         case 'angry':
             return breathing_excercice(name, furhat, lock, queue)
         case 'happy':
             return meditation_for_happiness(name, furhat, lock, queue)
         case 'sad':
-            say_comforting_story(furhat, lock, queue)
-            return breathing_excercice(name, furhat, lock, queue)
+            was_happy = say_comforting_story(furhat, lock, queue)
+            if was_happy:
+                return breathing_excercice(name, furhat, lock, queue)
+            else:
+                return False
         case 'neutral':
             return mindfulness_exercise(name, furhat, lock, queue)
         case 'disgust':
             return mindfulness_exercise(name, furhat, lock, queue)
-            # TODO
 
 def offer_options(name, furhat, queue, lock):
     picked_exercise = False
@@ -378,9 +377,9 @@ def offer_options(name, furhat, queue, lock):
         elif "leave" not in result or "stop" not in result or "end" not in result:
             furhat.say(text="I'm sorry, I didn't catch that. Let me repeat the options again.")
 
-        if "leave" in result or "stop" in result or "end" in result:
-            break
-            # TODO stop
+        if was_stop_word_in_response(result):
+            return False
+
         time.sleep(5)
 
 def list_mindfulness_exercise_and_let_pick(furhat, lock, queue):
@@ -479,7 +478,7 @@ def breathing_excercice(name, furhat, lock, queue):
     if "how long" in result.message:
         furhat.say(text="This breathing exercise takes just a few minutes.")
     if "other choice" in result.message or "something different" in result.message:
-        furhat.say(text="Do you want to try something different?")  # TODO sth different
+        return False
     if "no" in result.message:
         furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
 
@@ -721,9 +720,8 @@ def say_comforting_story(furhat, lock, queue):
                 furhat.say(
                     "I understand. That is a difficult situation. But remember, challenges are what make life interesting"
                     "and overcoming them is what makes life meaningful.")
-        elif "stop" in result or "end" in result:
-            furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
-            #TODO something different
+        elif was_stop_word_in_response(result)
+            return False
         else:
             furhat.say(
                 "I didn't catch that. Can you repeat it, please?")
@@ -741,9 +739,11 @@ def meditation_for_happiness(name, furhat, lock, queue):
     if "how long" in result.message:
         furhat.say(text="This meditation is for 10 minutes.")
     if "other choice" in result.message or "something different" in result.message:
-        furhat.say(text="Do you want to try something different?") #TODO sth different
+        furhat.say(text="Do you want to try something different?")
+        return False
     if "no" in result.message:
-        furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")#TODO something different
+        furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
+        return False
 
     stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
     if stopped:
@@ -869,10 +869,9 @@ def mindfulness_exercise(name, furhat, lock, queue):
     if "how long" in result.message:
         furhat.say(text="This exercise takes about 10 minutes.")
     if "other choice" in result.message or "something different" in result.message:
-        furhat.say(text="Do you want to try something different?")  # TODO sth different
+        return False
     if "no" in result.message:
-        furhat.say(
-            text="I caught that you don't want to do this. Do you want to try something different?")  # TODO something different
+        return False
 
     furhat.say("Let me list all mindfulness exercises for you and then you can pick one")
 
