@@ -923,7 +923,7 @@ def five_senses_exercise(furhat, lock, queue):
     time.sleep(5)
     furhat.say(text="Notice one thing you can taste.")
     time.sleep(5)
-    
+
     return did_session_help(furhat)
 
 
@@ -931,8 +931,7 @@ def walking_meditation(furhat, lock, queue):
     #https://www.mayoclinic.org/healthy-lifestyle/consumer-health/in-depth/mindfulness-exercises/art-20046356
     furhat.say(text="Find a quiet place 10 to 20 feet in length, and begin to walk slowly. "
                "Focus on the experience of walking, being aware of the sensations of standing and the subtle movements that keep your balance. When you reach the end of your path, turn and continue walking, maintaining awareness of your sensations.")
-    time.sleep(5)
-    stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
+    time.sleep(10)
 
     return did_session_help(furhat)
 
@@ -944,7 +943,6 @@ def gratitude_list(furhat, lock, queue):
     time.sleep(1)
     furhat.say(text="You can write your gratitude list first thing in the morning to get your day off to a great start or list a few things that you’re grateful for before winding down for bed.")
     time.sleep(5)
-    stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
 
     return did_session_help(furhat)
 
