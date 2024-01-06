@@ -923,8 +923,7 @@ def five_senses_exercise(furhat, lock, queue):
     time.sleep(5)
     furhat.say(text="Notice one thing you can taste.")
     time.sleep(5)
-    stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
-
+    
     return did_session_help(furhat)
 
 
