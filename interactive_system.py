@@ -46,7 +46,7 @@ def identification(furhat):
     while not answered:
         furhat.say(text="You can skip the identification process and enter an anonymous mode.")
         time.sleep(2)
-        furhat.say(text="Do you already have a profile and identification?")
+        furhat.say(text="Otherwise, do you already have a profile and identification?")
         time.sleep(2)
         result = furhat.listen()
         print("message was:" + result.message)
@@ -72,6 +72,8 @@ def identification(furhat):
                     if "repeat" in result.message or "again" in result.message:
                         furhat.say(text="Please, identify yourself with a name and a password.")
                         time.sleep(2)
+                    elif "new profile" in result.message or "create" in result.message:
+                        break
                     continue
                 if is_name_and_password_valid(name,password):
                     identified = True
@@ -97,20 +99,22 @@ def identification(furhat):
             name, password = listen_to_name_and_password(furhat)
             if name is None:
                 furhat.say(text="I didn't get that, can you repeat it?")
-                time.sleep(1)
+                time.sleep(2)
                 continue
 
             if name == ANONYM_NAME:
                 furhat.say(text="You can't enter this name, pick a different one.")
-                time.sleep(1)
+                time.sleep(2)
                 continue
 
             if password_manager.is_username_already_stored(name):
                 furhat.say(text="A profile with this name already exists. Pick another version of your name that will be used for your identification."
                                 "Don't forget to remember it.")
+                time.sleep(2)
                 furhat.say(text="Tell me your name and password you want to use for your identification. "
                                 "Say it slow in order name and password")
-                time.sleep(5)
+                time.sleep(2)
+                continue
 
             furhat.say(text="I understood " + name + " with " + password + " as a password. Is this correct?")
             time.sleep(2)
@@ -119,6 +123,7 @@ def identification(furhat):
                 save_name_and_password(name, password)
                 furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.")
                 identified = True
+                return name
             else:
                 furhat.say(text="You didn't say it was correct. "
                            "Could you please tell me your name and password you want to use for your identification again?"
@@ -387,7 +392,14 @@ def list_mindfulness_exercise_and_let_pick(furhat, lock, queue):
         time.sleep(15)
         result = furhat.listen()
         result = result.message
-        if "first" in result or "mindful breathing" in result:
+        print("list mindfulness exercises message: " + result)
+        if "again" in result or "once more" in result or "repeat" in result:
+            continue
+        elif "stop" in result or "end" in result:
+            return False
+        elif "other options" in result:
+            return False
+        elif "first" in result or "mindful breathing" in result:
             picked_option = True
             return mindful_breathing(furhat, lock, queue)
         elif "second" in result or "body scan" in result:
@@ -399,16 +411,12 @@ def list_mindfulness_exercise_and_let_pick(furhat, lock, queue):
         elif "fourth" in result or "walking meditation" in result:
             picked_option = True
             return walking_meditation(furhat, lock, queue)
-        elif "fifth" in result or "observe" or "eyes closes" in result:
+        elif "fifth" in result or "observe" in result or "eyes closes" in result:
             picked_option = True
             return observe_with_eyes_closed(furhat, lock, queue)
         elif "last" in result or "sixth" in result or "gratitude list" in result:
             picked_option = True
             return gratitude_list(furhat, lock, queue)
-        elif "again" in result:
-            continue
-        elif "stop" in result or "end" in result:
-            break
         else:
             furhat.say(text="I'm sorry, I didn't catch that. Let me repeat the options again.")
         time.sleep(5)
@@ -478,6 +486,8 @@ def breathing_excercice(name, furhat, lock, queue):
         return False
     if "no" in result.message:
         furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
+    if was_stop_word_in_response(result.message):
+        return False
 
     stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
     if stopped:
@@ -589,7 +599,7 @@ def did_session_help(furhat, session_name):
     done_exercises.append(session_name)
     furhat.say(text="Thank you for spending time with me. Did this session help?")
     result = furhat.listen()
-    if "yes" in result:
+    if "yes" in result.message:
         furhat.say(text="I'm glad this helped. Hope to see you tomorrow.")
     else:
         furhat.say(text="Do you want to try something different?")

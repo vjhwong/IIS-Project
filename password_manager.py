@@ -20,7 +20,9 @@ def secure_password_with_salt(password, salt):
     return secure_password
 
 def is_username_already_stored(username):
-    with open('user_credentials.txt', 'r') as f:
+    if not os.path.exists(filename):
+        return False
+    with open(filename, 'r') as f:
         for line in f:
             saved_username, saved_salt, saved_password = line.strip().split(';')
             if saved_username == username:
@@ -32,9 +34,12 @@ def save_password(username, salt, password):
         f.write(f'{username};{salt};{password}\n')
 
 def validate_password(username, entered_password):
-    with open('user_credentials.txt', 'r') as f:
+    if not os.path.exists(filename):
+        return True
+    with open(filename, 'r') as f:
         for line in f:
             saved_username, saved_salt, saved_password = line.strip().split(';')
+            saved_salt = saved_salt.encode()
             if saved_username == username:
                 entered_hashed_password = secure_password_with_salt(entered_password, salt=saved_salt)
                 if entered_hashed_password == saved_password:
