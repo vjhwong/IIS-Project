@@ -810,6 +810,7 @@ def mindfulness_exercise(name, furhat, lock, queue):
         furhat.say(
             text="I caught that you don't want to do this. Do you want to try something different?")  # TODO something different
 
+    #TODO add actual mindfulness exercises here
 
 def mindful_breathing(furhat, lock, queue):
     # https://www.verywellhealth.com/mindfulness-exercises-5204406 and https://www.healthline.com/health/box-breathing#hold-your-breath
@@ -875,10 +876,40 @@ def walking_meditation(furhat, lock, queue):
 def gratitude_list(furhat, lock, queue):
     #https://www.healthline.com/health/mind-body/mindfulness-activities#for-adults
     furhat.say(text="Creating a gratitude list may help improve well-being and promoteTrusted Source positivity by helping you focus on the things that you’re grateful for.")
+    time.sleep(1)
     furhat.say(text="Try adding 3-5 items to your list each day and build it into your daily schedule to stay consistent.")
+    time.sleep(1)
     furhat.say(text="You can write your gratitude list first thing in the morning to get your day off to a great start or list a few things that you’re grateful for before winding down for bed.")
     time.sleep(5)
     stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
     if stopped:
         return
 
+def observe_with_eyes_closed(furhat, lock, queue):
+    #https://www.fearlessculture.design/blog-posts/21-simple-mindfulness-exercises-to-improve-your-focus
+    furhat.say("Sometimes, the best way to remove a distraction is to stop seeing it.")
+    time.sleep(1)
+    furhat.say("This exercise is ideal to practice in public space.")
+    time.sleep(1)
+    furhat.say("Now, close your eyes.")
+    time.sleep(1)
+    furhat.say("Take a deep breath and relax.")
+    time.sleep(1)
+    furhat.say("Focus on what's going on around you. First, pay attention to the sounds that are closer to you.")
+    time.sleep(1)
+    furhat.say("What do you hear?")
+    time.sleep(15)
+    furhat.say("Little by little, start focusing on the sounds that are farther away.")
+    time.sleep(15)
+    furhat.say("Now, pay attention to what’s going on right next to you. What sounds do you hear? Can you hear voices? What are they saying?")
+    time.sleep(15)
+    furhat.say("Now repeat the same routine with the more distant noises, sounds, and voices. Remember that you are trying to understand, not to analyze, what’s happening.")
+    time.sleep(15)
+    furhat.say("Whenever you're ready, open your eyes and tell me to stop.")
+
+    interrupted = False
+    while not interrupted:
+        result = furhat.listen()
+        if "stop" in result.message or "end" in result.message or "leave" in result.message:
+            interrupted = True
+        time.sleep(1)
