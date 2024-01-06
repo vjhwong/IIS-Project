@@ -219,7 +219,7 @@ def ask_if_offer_option_or_end(furhat):
             answered = True
             return OTHER_OPTION
         else:
-            furhat.say(REPEAT_MESSAGE)
+            furhat.say(text=REPEAT_MESSAGE)
 
 def end_session(furhat, queue):
     # TODO save user happiness and stats
