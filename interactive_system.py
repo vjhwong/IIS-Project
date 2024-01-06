@@ -17,6 +17,9 @@ START_EMOTION_REPLY = {
 }
 
 ANONYM_NAME = "Anonym"
+REPEAT_MESSAGE = "I couldn't catch that, let me repeat myself."
+OTHER_OPTION = 'other option'
+END = 'end'
 
 def set_furhat():
     furhat = FurhatRemoteAPI("localhost")
@@ -188,16 +191,59 @@ def run_conversation_loop(name, furhat, queue):
                 result = furhat.listen()
                 result = result.message
 
-                if "yes" in result or "list" in result or "options" in result or "different" in result:
-                    was_happy = offer_options(name, furhat, queue, lock)
-                    # TODO what to do now? if user wants to end
+                if "yes" in result or other_options_word_in_response(result):
+                    session_should_end = offer_option_and_end_session_if_user_not_happy(name, furhat, queue, lock)
+                    if session_should_end:
+                        break
                 elif "end" in result or "stop" in result or "leave" in result:
                     break
 
             # TODO
         time.sleep(5)
     furhat.say(text="Thank you for spending time with me. Hope to see you next time! Have a great day!")
-    #TODO save user happiness and stats
+    end_session(furhat)
+    return
+
+def ask_if_offer_option_or_end(furhat):
+    answered = False
+    while not answered:
+        furhat.say("Do you want to see other options? Or do you want to end this session?")
+        result = furhat.listen()
+        stop_in_response = was_stop_word_in_response(result.message)
+        if stop_in_response:
+            end_session(furhat)
+            answered = True
+            return END
+        elif other_options_word_in_response(result.message):
+            answered = True
+            return OTHER_OPTION
+        else:
+            furhat.say(REPEAT_MESSAGE)
+
+def end_session(furhat):
+    # TODO save user happiness and stats
+    furhat.say("You decided to end this session. Thank you for spending time with me today. I'll see you next time. Have a great day!")
+
+
+def offer_option_and_end_session_if_user_not_happy(name, furhat, queue, lock):
+    session_should_end = False
+    while not session_should_end:
+        was_happy = offer_options(name, furhat, queue, lock)
+
+        if not was_happy:
+            result = ask_if_offer_option_or_end(furhat)
+            if result == END:
+                return True
+            else:
+                continue
+        else:
+            return False
+
+
+def other_options_word_in_response(response):
+    if "list" in response or "options" in response or "different" in response:
+        return True
+    return False
 
 def user_wants_to_do_exercise_based_on_emotion(emotion, done_exercises):
     match emotion:
@@ -396,11 +442,16 @@ def does_user_want_to_stop(queue, lock, furhat):
 
 def listen_for_stop_in_response(furhat):
     result = furhat.listen()
-    if "stop" in result.message or "end" in result.message or "leave" in result.message:
+    if was_stop_word_in_response(result.message):
         furhat.say(text="I heard stop. Do you want to stop?")
         result = furhat.listen()
         if "yes" in result.message:
             return True
+    return False
+
+def was_stop_word_in_response(response):
+    if "stop" in response or "end" in response or "leave" in response:
+        return True
     return False
 
 def breathing_excercice(name, furhat, lock, queue):
