@@ -332,14 +332,14 @@ def offer_options(name, furhat, queue, lock):
         furhat.say(text="mindfulness exercises, I can list them if you'd like. ")
         time.sleep(2)
         furhat.say(text="So, what will it be? If you'd like to leave, you can just tell me to stop.")
-        time.sleep(5)
+        time.sleep(10)
         # TODO tell more about each
         answer = furhat.listen()
         result = answer.message
         if "first" in result or "breathing exercise" in result:
             picked_exercise = True
             furhat.say(text="Do you want to know more or start or try something different?")
-            if "option" in result or "choice" in result.message or "different" in result.message:
+            if "option" in result or "choice" in result or "different" in result:
                 continue
             if "more" in result:
                 # TODO explain breathing exercise
@@ -349,7 +349,7 @@ def offer_options(name, furhat, queue, lock):
         elif "second" in result or "meditation for happiness" in result or "meditation" in result or "happiness" in result:
             picked_exercise = True
             furhat.say(text="Do you want to know more or start or try something different?")
-            if "option" in result or "choice" in result.message or "different" in result.message:
+            if "option" in result or "choice" in result or "different" in result:
                 continue
             if "more" in result:
                 # TODO explain meditation
@@ -359,7 +359,7 @@ def offer_options(name, furhat, queue, lock):
         elif "third" in result or "talk" in result or "listen" in result or "comforting" in result:
             picked_exercise = True
             furhat.say(text="Do you want to know more or start or try something different?")
-            if "option" in result or "choice" in result.message or "different" in result.message:
+            if "option" in result or "choice" in result or "different" in result:
                 continue
             if "more" in result:
                 # TODO explain listening and comforting
@@ -368,7 +368,7 @@ def offer_options(name, furhat, queue, lock):
         elif "last" in result or "fifth" in result or "mindfulness exercise" in result or "list" in result:
             picked_exercise = True
             furhat.say(text="Do you want to know more or start or try something different?")
-            if "option" in result or "choice" in result.message or "different" in result.message:
+            if "option" in result or "choice" in result or "different" in result:
                 continue
             if "more" in result:
                 # TODO explain mindfulness exercise
@@ -444,7 +444,7 @@ def stopped_if_user_wants_to_stop(queue, lock, furhat): # TODO what if the user 
     if does_user_want_to_stop(queue, lock, furhat):
         furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
         result = furhat.listen()
-        if "yes" in result.message:
+        if "yes" in result.message or "stop" in result.message or "different" in result.message:
             furhat.say(text="Let's try something different then!")
             return True
         else:
