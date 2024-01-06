@@ -21,6 +21,7 @@ REPEAT_MESSAGE = "I couldn't catch that, let me repeat myself."
 OTHER_OPTION = 'other option'
 END = 'end'
 STOP = 'STOP'
+done_exercises = [] #TODO fill list somewhere
 
 def set_furhat():
     furhat = FurhatRemoteAPI("localhost")
@@ -36,7 +37,7 @@ def furhat_interaction(emotion, furhat):
         #remember that is an array
         if len(emotion) != 0:
             emotion = emotion[0]
-            
+
 # TODO if user doesn't understand, repeat what furhat said
 
 def identification(furhat):
@@ -151,7 +152,7 @@ def run_conversation_loop(name, furhat, queue):
     lock = threading.Lock()
     conversation_ended = False
     first_interaction = True
-    done_exercises = [] #TODO fill list somewhere
+
     while not conversation_ended:
         em = get_an_emotion(queue, lock)
         if len(em) != 0 and (em[0] is not None or em[0] != ''):
@@ -574,9 +575,10 @@ def breathing_excercice(name, furhat, lock, queue):
     furhat.say(
         text="You've finished this breathing exercise. You will get the most benefit if you do it regularly, as part of your daily routine.")
 
-    return did_session_help(furhat)
+    return did_session_help(furhat, breathing_excercice.__name__)
 
-def did_session_help(furhat):
+def did_session_help(furhat, session_name):
+    done_exercises.append(session_name)
     furhat.say(text="Thank you for spending time with me. Did this session help?")
     result = furhat.listen()
     if "yes" in result:
@@ -714,7 +716,7 @@ def say_comforting_story(furhat, lock, queue):
             furhat.say(
                 "I didn't catch that. Can you repeat it, please?")
 
-    return did_session_help(furhat)
+    return did_session_help(furhat, say_comforting_story.__name__)
 
 def meditation_for_happiness(name, furhat, lock, queue):
     #https://jackcanfield.com/blog/happiness-meditation/
@@ -845,7 +847,7 @@ def meditation_for_happiness(name, furhat, lock, queue):
                "and happiness in your life.")
     time.sleep(2)
 
-    return did_session_help(furhat)
+    return did_session_help(furhat, meditation_for_happiness.__name__)
 
 def mindfulness_exercise(name, furhat, lock, queue):
     furhat.say(text="Here's a simple guided mindfulness exercise. Can we start? ")
@@ -865,7 +867,7 @@ def mindfulness_exercise(name, furhat, lock, queue):
 
     was_happy = list_mindfulness_exercise_and_let_pick(furhat, lock, queue)
     if was_happy:
-        return did_session_help(furhat)
+        return did_session_help(furhat, mindfulness_exercise.__name__)
     else:
         return False
 
@@ -892,7 +894,7 @@ def mindful_breathing(furhat, lock, queue):
     furhat.say(text="Repeat until you want to stop.")
     time.sleep(5)
 
-    return did_session_help(furhat)
+    return did_session_help(furhat, mindful_breathing.__name__)
 
 def body_scan(furhat, lock, queue):
     #https://www.mayoclinic.org/healthy-lifestyle/consumer-health/in-depth/mindfulness-exercises/art-20046356
@@ -900,7 +902,7 @@ def body_scan(furhat, lock, queue):
     furhat.say(text="Focus your attention slowly and deliberately on each part of your body, in order, from toe to head or head to toe. Be aware of any sensations, emotions or thoughts associated with each part of your body.")
     time.sleep(5)
 
-    return did_session_help(furhat)
+    return did_session_help(furhat, body_scan.__name__)
 
 def five_senses_exercise(furhat, lock, queue):
     #https://www.verywellhealth.com/mindfulness-exercises-5204406
@@ -915,7 +917,7 @@ def five_senses_exercise(furhat, lock, queue):
     furhat.say(text="Notice one thing you can taste.")
     time.sleep(5)
 
-    return did_session_help(furhat)
+    return did_session_help(furhat, five_senses_exercise.__name__)
 
 
 def walking_meditation(furhat, lock, queue):
@@ -924,7 +926,7 @@ def walking_meditation(furhat, lock, queue):
                "Focus on the experience of walking, being aware of the sensations of standing and the subtle movements that keep your balance. When you reach the end of your path, turn and continue walking, maintaining awareness of your sensations.")
     time.sleep(10)
 
-    return did_session_help(furhat)
+    return did_session_help(furhat, walking_meditation.__name__)
 
 def gratitude_list(furhat, lock, queue):
     #https://www.healthline.com/health/mind-body/mindfulness-activities#for-adults
@@ -935,7 +937,7 @@ def gratitude_list(furhat, lock, queue):
     furhat.say(text="You can write your gratitude list first thing in the morning to get your day off to a great start or list a few things that you’re grateful for before winding down for bed.")
     time.sleep(5)
 
-    return did_session_help(furhat)
+    return did_session_help(furhat, gratitude_list.__name__)
 
 def observe_with_eyes_closed(furhat, lock, queue):
     #https://www.fearlessculture.design/blog-posts/21-simple-mindfulness-exercises-to-improve-your-focus
@@ -966,4 +968,4 @@ def observe_with_eyes_closed(furhat, lock, queue):
             interrupted = True
         time.sleep(1)
 
-    return did_session_help(furhat)
+    return did_session_help(furhat, observe_with_eyes_closed.__name__)
