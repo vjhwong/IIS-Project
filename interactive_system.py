@@ -85,6 +85,7 @@ def identification(furhat):
                 if is_name_and_password_valid(name,password):
                     identified = True
                     furhat.say(text="Hello " + name + ". Welcome back! I'm happy to see you.")
+                    return name
                 else:
                     furhat.say(text="I'm sorry, I don’t seem to know " + name + " with that password, would you like to repeat it " \
                                     "or do you want to create a new profile?")
