@@ -61,6 +61,8 @@ def create_video(queue : queue.Queue, model):
 
         face_idx = 0
         for (x, y, w, h, p) in faces[0]:
+            if face_idx >= len(emotion):
+                break
             cv2.rectangle(frame, (int(x), int(y)), (int(w), int(h)), (0, 0, 255), 3)
             cv2.putText(frame, emotion[face_idx], (int(x), int(y - 10)), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 0, 255),2)
             face_idx += 1
