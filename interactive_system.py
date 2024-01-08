@@ -160,7 +160,6 @@ def is_name_and_password_valid(name,password):
     return password_manager.validate_password(name, password)
 
 def run_conversation_loop(name, furhat, queue):
-    time.sleep(5)
     lock = threading.Lock()
     conversation_ended = False
     first_interaction = True
