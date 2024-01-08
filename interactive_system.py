@@ -95,7 +95,7 @@ def identification(furhat):
 
             if not identified:
                 return create_new_profile(furhat)
-        elif "new profile" in result or "no" in result or "don't have a profile" in result:
+        elif "new profile" in result.message or "no" in result.message or "don't have a profile" in result.message:
             return  create_new_profile(furhat)
         else:
             if furhat_should_repeat_itself(result.message):
