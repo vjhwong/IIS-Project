@@ -151,12 +151,14 @@ def create_new_profile(furhat):
         if "yes" in result.message or "correct" in result.message and "not correct" not in result.message and "isn't correct" not in result.message:
             save_name_and_password(name, password)
             furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.")
+            time.sleep(2)
             identified = True
             return name
         else:
             furhat.say(text="You didn't say it was correct. "
                             "Could you please tell me your name and password you want to use for your identification again?"
                             "Say it slow in order name and password.")
+            time.sleep(3)
 
 def furhat_should_repeat_itself(message):
     if message == '' or user_wants_to_repeat_what_furhat_said(message):
@@ -240,6 +242,7 @@ def ask_if_offer_option_or_end(furhat, queue):
     answered = False
     while not answered:
         furhat.say(text="Do you want to see other options? Or do you want to end this session?")
+        time.sleep(2)
         result = furhat.listen()
         stop_in_response = was_stop_word_in_response(result.message)
         if stop_in_response:

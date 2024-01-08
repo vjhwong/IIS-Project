@@ -14,6 +14,7 @@ def secure_password(password):
     return salt, secure_password
 
 def secure_password_with_salt(password, salt):
+    print(salt)
     password_salted = password.encode() + salt
     secure_password = hashlib.sha256(password_salted).hexdigest()
 
