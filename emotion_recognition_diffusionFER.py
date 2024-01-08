@@ -95,7 +95,7 @@ with open(csv_path, 'w',newline='') as csv_file:
     plt.tight_layout()
 
     # save 
-    plt.savefig('diffusionFER_au_visualization.png')
+    plt.savefig('diffusionFER_aus_visualization.png')
 
     # show the graph
     plt.show()

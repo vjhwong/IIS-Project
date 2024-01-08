@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# to ignore all warnings
+
 warnings.filterwarnings("ignore")
 
 # initialize the detector
@@ -108,7 +108,7 @@ plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 
 # save 
-plt.savefig('multiemoVA_au_visualization.png')
+plt.savefig('multiemoVA_aus_visualization.png')
 
 # show the graph
 plt.show()
