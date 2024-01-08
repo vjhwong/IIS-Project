@@ -54,13 +54,14 @@ def identification(furhat):
         print("message was:" + result.message)
         if result.message == '':
             result = furhat.listen()
+            print("message was:" + result.message)
         if result.message == '':
             continue
         identified = False
         if "skip" in result.message or "anonymous" in result.message or "anonym" in result.message:
             return start_anonym_mode(furhat)
 
-        if "yes" in result.message or "identification" in result.message or "have a profile" in result.message or "identify" in result.message:
+        if "yes" in result.message or "I do" in result.message or "identification" in result.message or "I have a profile" in result.message or "identify" in result.message:
             furhat.say(text="Please, identify yourself with a name and a password.")
             # TODO we could just keep name, but then if there were two Eves in a family and one would already use it, furhat would tell she uses it already which sounds like a gdpr problem
             time.sleep(2)
@@ -254,6 +255,7 @@ def ask_if_offer_option_or_end(furhat, queue):
             return OTHER_OPTION
         else:
             furhat.say(text=REPEAT_MESSAGE)
+            time.sleep(2)
 
 def end_session(furhat, queue):
     # TODO save user happiness and stats
@@ -582,7 +584,7 @@ def breathing_excercice(name, furhat, lock, queue):
         return False
     furhat.say(
         text="Then let it flow out gently, counting from 1 to 5 again, if you find this helpful.")
-    time.sleep(2)
+    time.sleep(1)
     stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
     if stopped:
         return False
@@ -611,8 +613,8 @@ def breathing_excercice(name, furhat, lock, queue):
         text="Now, repeat this for at least five minutes. I will be notifying you about the time, after each minute passes")
 
     iteration = 1
-    for i in range(5):
-        result = furhat.listen(timeout=60)
+    for i in range(10): #there is no timeout for furhat in this api
+        result = furhat.listen()
         if result != '':
             furhat.say(text="Do you want to stop?")
             result = furhat.listen()
@@ -625,6 +627,7 @@ def breathing_excercice(name, furhat, lock, queue):
             furhat.say(
                 text=str(iteration) + " minutes has passed. Let's keep doing this, you're doing great!")
         iteration += 1
+        time.sleep(6)
 
     furhat.say(
         text="You've finished this breathing exercise. You will get the most benefit if you do it regularly, as part of your daily routine.")
