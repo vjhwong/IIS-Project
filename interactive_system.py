@@ -473,22 +473,24 @@ def is_happy_by_emotion(queue, lock): #TODO add original emotion so that if pers
     em = get_an_emotion(queue, lock)
     if len(em) != 0 and (em[0] is not None or em[0] != ''):
         if (em[0] == 'angry' or em[0] == 'disgust'):
-            furhat.say(text="I see you don't want to do this. Do you want to try something different?")
-            result = furhat.listen()
-            if "yes" in result.message:
-                return False
+            furhat.say(text="I see you don't want to do this.")
+            return user_wants_to_try_something_different(furhat)
     return True
+
+def user_wants_to_try_something_different(furhat):
+    furhat.say(text="Do you want to try something different?")
+    time.sleep(2)
+    result = furhat.listen()
+    if "yes" in result.message or "stop" in result.message or "different" in result.message:
+        furhat.say(text="Let's try something different then!")
+        return True
+    else:
+        furhat.say(text="Let's continue then!")
+        return False
 
 def stopped_if_user_wants_to_stop(queue, lock, furhat): # TODO what if the user wants to stop the whole session?
     if does_user_want_to_stop(queue, lock, furhat):
-        furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
-        result = furhat.listen()
-        if "yes" in result.message or "stop" in result.message or "different" in result.message:
-            furhat.say(text="Let's try something different then!")
-            return True
-        else:
-            furhat.say(text="Let's continue then!")
-            return False
+        return user_wants_to_try_something_different(furhat)
 
 
 def does_user_want_to_stop(queue, lock, furhat):
@@ -524,7 +526,8 @@ def breathing_excercice(name, furhat, lock, queue):
     if "other choice" in result.message or "something different" in result.message:
         return False
     if "no" in result.message:
-        furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
+        furhat.say(text="I caught that you don't want to do this.")
+        return False
     if was_stop_word_in_response(result.message):
         return False
 
@@ -642,12 +645,11 @@ def did_session_help(furhat, session_name):
     if "yes" in result.message:
         furhat.say(text="I'm glad this helped. Hope to see you tomorrow.")
     else:
-        furhat.say(text="Do you want to try something different?")
         return False
     return True
 
 def say_comforting_story(furhat, lock, queue):
-    furhat.say(text="To understand you better, what happened? Is this work related or school related? Or about relationships?")
+    furhat.say(text="To understand you better, what happened? Is this work related or school related? Or is it related to relationships?")
     caught_answer = False
 
     while not caught_answer:
@@ -787,10 +789,9 @@ def meditation_for_happiness(name, furhat, lock, queue):
     if "how long" in result.message:
         furhat.say(text="This meditation is for 10 minutes.")
     if "other choice" in result.message or "something different" in result.message:
-        furhat.say(text="Do you want to try something different?")
+        #furhat.say(text="Do you want to try something different?")
         return False
     if "no" in result.message:
-        furhat.say(text="I caught that you don't want to do this. Do you want to try something different?")
         return False
 
     stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
@@ -922,8 +923,10 @@ def mindful_breathing(furhat, lock, queue):
     # https://www.verywellhealth.com/mindfulness-exercises-5204406 and https://www.healthline.com/health/box-breathing#hold-your-breath
 
     furhat.say(text="This technique can be beneficial to anyone, especially those who want to meditate or reduce stress.")
-    furhat.say(
+    time.sleep(2)
+    furhat.say(text=
         "Make sure that you’re seated upright in a comfortable chair with your feet flat on the floor. Try to be in a stress-free, quiet environment where you can focus on your breathing.")
+    time.sleep(2)
     furhat.say(text="Keeping your hands relaxed in your lap with your palms facing up, focus on your posture.")
     time.sleep(5)
     stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
