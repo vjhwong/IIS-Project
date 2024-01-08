@@ -14,7 +14,7 @@ warnings.filterwarnings("ignore")
 detector = Detector(device="cuda")
 
 path_to_file = "..\DiffusionFER\DiffusionEmotion_S\dataset_sheet.csv"
-csv_path='.\\aus.csv'
+csv_path='.\\diffusionFER_aus.csv'
 
 #load the annotations
 dataset = pd.read_csv(path_to_file)
@@ -95,7 +95,7 @@ with open(csv_path, 'w',newline='') as csv_file:
     plt.tight_layout()
 
     # save 
-    plt.savefig('au_visualization.png')
+    plt.savefig('diffusionFER_au_visualization.png')
 
     # show the graph
     plt.show()

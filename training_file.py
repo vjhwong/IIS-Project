@@ -75,7 +75,7 @@ def hyperparameter_tuning_svm(train_in, train_out, val_in, val_out):
 def main():
     detector=Detector(device="cpu")
 
-    file_path=".\\aus.csv"
+    file_path=".\\diffusionFER_aus.csv"
     features, labels, scaler = read_and_preprocess(file_path)
     train_in, val_in, test_in, train_out, val_out, test_out = balanced_split(features, labels)
 
@@ -93,6 +93,10 @@ def main():
     # Evaluate the model on the test set
     accuracy_test_svm = accuracy_score(test_out, predicted_test_svm)
     print("Accuracy of SVM model on the test set: ", accuracy_test_svm*100)
+
+
+
+    
 
     dump(best_svm_model, 'svm_model.joblib')
 

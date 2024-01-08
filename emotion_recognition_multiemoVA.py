@@ -15,7 +15,7 @@ detector = Detector(device="cuda")
 
 main_folder = "..\MultiEmoVA"
 
-csv_path = '.\\ausMulti.csv'
+csv_path = '.\\multiemoVA_aus.csv'
 
 # create a list to store file paths
 image_paths = []
@@ -108,7 +108,7 @@ plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 
 # save 
-plt.savefig('au_visualizationMulti.png')
+plt.savefig('multiemoVA_au_visualization.png')
 
 # show the graph
 plt.show()
