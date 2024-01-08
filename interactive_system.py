@@ -374,8 +374,10 @@ def offer_options(name, furhat, queue, lock):
                 pass
             return list_mindfulness_exercise_and_let_pick(furhat, lock, queue)
 
-        elif "leave" not in result or "stop" not in result or "end" not in result:
+        elif not was_stop_word_in_response(result):
             furhat.say(text="I'm sorry, I didn't catch that. Let me repeat the options again.")
+            time.sleep(2)
+            continue
 
         if was_stop_word_in_response(result):
             return False
