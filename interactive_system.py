@@ -21,7 +21,9 @@ REPEAT_MESSAGE = "I couldn't catch that, let me repeat myself."
 OTHER_OPTION = 'other option'
 END = 'end'
 STOP = 'STOP'
+SKIP = '--SKIP--'
 done_exercises = [] #TODO fill list somewhere
+BACK = '--BACK--'
 
 def set_furhat():
     furhat = FurhatRemoteAPI("localhost")
@@ -52,11 +54,11 @@ def identification(furhat):
         print("message was:" + result.message)
         if result.message == '':
             result = furhat.listen()
+        if result.message == '':
+            continue
         identified = False
-
         if "skip" in result.message or "anonymous" in result.message or "anonym" in result.message:
-            furhat.say(text="You decided to enter an anonymous mode. Welcome.")
-            return ANONYM_NAME
+            return start_anonym_mode(furhat)
 
         if "yes" in result.message or "identification" in result.message or "have a profile" in result.message or "identify" in result.message:
             furhat.say(text="Please, identify yourself with a name and a password.")
@@ -64,6 +66,8 @@ def identification(furhat):
             time.sleep(2)
             while not identified:
                 name, password = listen_to_name_and_password(furhat)
+                if name == SKIP:
+                    start_anonym_mode(furhat)
                 if name is None:
                     furhat.say(text="I didn't get that, would you like to repeat it " \
                                     "or do you want to create a new profile?")
@@ -86,49 +90,67 @@ def identification(furhat):
                     if "repeat" in result.message or "again" in result.message:
                         furhat.say(text="Please, identify yourself with a name and a password.")
                         time.sleep(2)
+
+            if not identified:
+                return create_new_profile(furhat)
+        elif "new profile" in result or "no" in result or "don't have a profile" in result:
+            return  create_new_profile(furhat)
         else:
             if furhat_should_repeat_itself(result.message):
                 time.sleep(2)
                 continue
-        if not identified:
-            furhat.say(text="Let's create a new profile for you. "
-                            "Tell me your name and password you want to use for your identification. "
-                            "Say it slow in order name and password")
-            time.sleep(5)
-        while not identified:
-            name, password = listen_to_name_and_password(furhat)
-            if name is None:
-                furhat.say(text="I didn't get that, can you repeat it?")
-                time.sleep(2)
-                continue
-
-            if name == ANONYM_NAME:
-                furhat.say(text="You can't enter this name, pick a different one.")
-                time.sleep(2)
-                continue
-
-            if password_manager.is_username_already_stored(name):
-                furhat.say(text="A profile with this name already exists. Pick another version of your name that will be used for your identification."
-                                "Don't forget to remember it.")
-                time.sleep(2)
-                furhat.say(text="Tell me your name and password you want to use for your identification. "
-                                "Say it slow in order name and password")
-                time.sleep(2)
-                continue
-
-            furhat.say(text="I understood " + name + " with " + password + " as a password. Is this correct?")
-            time.sleep(2)
-            result = furhat.listen()
-            if "yes" in result.message or "correct" in result.message and "not correct" not in result.message and "isn't correct" not in result.message:
-                save_name_and_password(name, password)
-                furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.")
-                identified = True
-                return name
             else:
-                furhat.say(text="You didn't say it was correct. "
-                           "Could you please tell me your name and password you want to use for your identification again?"
-                            "Say it slow in order name and password.")
+                furhat.say(text = REPEAT_MESSAGE)
+
+
     return name
+
+def start_anonym_mode(furhat):
+    furhat.say(text="You decided to enter an anonymous mode. Welcome.")
+    return ANONYM_NAME
+
+def create_new_profile(furhat):
+    furhat.say(text="Let's create a new profile for you. "
+                    "Tell me your name and password you want to use for your identification. "
+                    "Say it slow in order name and password")
+    time.sleep(5)
+
+    identified = False
+
+    while not identified:
+        name, password = listen_to_name_and_password(furhat)
+        if name is None:
+            furhat.say(text="I didn't get that, can you repeat it?")
+            time.sleep(2)
+            continue
+
+        if name == ANONYM_NAME:
+            furhat.say(text="You can't enter this name, pick a different one.")
+            time.sleep(2)
+            continue
+
+        if password_manager.is_username_already_stored(name):
+            furhat.say(
+                text="A profile with this name already exists. Pick another version of your name that will be used for your identification."
+                     "Don't forget to remember it.")
+            time.sleep(2)
+            furhat.say(text="Tell me your name and password you want to use for your identification. "
+                            "Say it slow in order name and password")
+            time.sleep(2)
+            continue
+
+        furhat.say(text="I understood " + name + " with " + password + " as a password. Is this correct?")
+        time.sleep(2)
+        result = furhat.listen()
+        if "yes" in result.message or "correct" in result.message and "not correct" not in result.message and "isn't correct" not in result.message:
+            save_name_and_password(name, password)
+            furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.")
+            identified = True
+            return name
+        else:
+            furhat.say(text="You didn't say it was correct. "
+                            "Could you please tell me your name and password you want to use for your identification again?"
+                            "Say it slow in order name and password.")
 
 def furhat_should_repeat_itself(message):
     if message == '' or user_wants_to_repeat_what_furhat_said(message):
@@ -143,6 +165,8 @@ def user_wants_to_repeat_what_furhat_said(message):
 def listen_to_name_and_password(furhat):
     result = furhat.listen()
     print("message is : " + result.message)
+    if "skip" in result.message:
+        return SKIP
     if result.message is None or result.message == '' or len(result.message.split()) != 2:
         return None, None
     if ' ' not in result.message:
@@ -201,17 +225,17 @@ def run_conversation_loop(name, furhat, queue):
 
         time.sleep(5)
     furhat.say(text="Thank you for spending time with me. Hope to see you next time! Have a great day!")
-    end_session(furhat)
+    end_session(furhat, queue)
     return
 
-def ask_if_offer_option_or_end(furhat):
+def ask_if_offer_option_or_end(furhat, queue):
     answered = False
     while not answered:
         furhat.say(text="Do you want to see other options? Or do you want to end this session?")
         result = furhat.listen()
         stop_in_response = was_stop_word_in_response(result.message)
         if stop_in_response:
-            end_session(furhat)
+            end_session(furhat, queue)
             answered = True
             return END
         elif other_options_word_in_response(result.message):
@@ -232,7 +256,7 @@ def offer_option_and_end_session_if_user_not_happy(name, furhat, queue, lock):
         was_happy = offer_options(name, furhat, queue, lock)
 
         if not was_happy:
-            result = ask_if_offer_option_or_end(furhat)
+            result = ask_if_offer_option_or_end(furhat, queue)
             if result == END:
                 return True
             else:
