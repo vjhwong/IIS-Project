@@ -68,6 +68,8 @@ def identification(furhat):
                 name, password = listen_to_name_and_password(furhat)
                 if name == SKIP:
                     start_anonym_mode(furhat)
+                if name == BACK:
+                    continue
                 if name is None:
                     furhat.say(text="I didn't get that, would you like to repeat it " \
                                     "or do you want to create a new profile?")
@@ -119,6 +121,10 @@ def create_new_profile(furhat):
 
     while not identified:
         name, password = listen_to_name_and_password(furhat)
+        if name == SKIP:
+            start_anonym_mode(furhat)
+        if name == BACK:
+            continue
         if name is None:
             furhat.say(text="I didn't get that, can you repeat it?")
             time.sleep(2)
@@ -167,6 +173,8 @@ def listen_to_name_and_password(furhat):
     print("message is : " + result.message)
     if "skip" in result.message:
         return SKIP
+    if "back" in result.message:
+        return BACK
     if result.message is None or result.message == '' or len(result.message.split()) != 2:
         return None, None
     if ' ' not in result.message:
