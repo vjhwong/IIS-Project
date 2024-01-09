@@ -46,6 +46,8 @@ def identification(furhat):
     answered = False
     name = ''
     while not answered:
+        furhat.gesture(name="OpenEyes")
+
         furhat.say(text="You can skip the identification process and enter an anonymous mode.")
         time.sleep(2)
         furhat.say(text="Otherwise, do you already have a profile and identification?")
@@ -74,6 +76,8 @@ def identification(furhat):
                 if name is None:
                     furhat.say(text="I didn't get that, would you like to repeat it " \
                                     "or do you want to create a new profile?")
+                    furhat.gesture(name="Thoughtful")
+                    
                     time.sleep(2)
                     result = furhat.listen()
                     if "repeat" in result.message or "again" in result.message:
@@ -84,11 +88,14 @@ def identification(furhat):
                     continue
                 if is_name_and_password_valid(name,password):
                     identified = True
+                    furhat.gesture(name="BigSmile")
                     furhat.say(text="Hello " + name + ". Welcome back! I'm happy to see you.")
                     return name
                 else:
                     furhat.say(text="I'm sorry, I don’t seem to know " + name + " with that password, would you like to repeat it " \
                                     "or do you want to create a new profile?")
+                    furhat.gesture(name="Shake")
+                    
                     time.sleep(2)
                     result = furhat.listen()
                     if "repeat" in result.message or "again" in result.message:
@@ -111,12 +118,16 @@ def identification(furhat):
 
 def start_anonym_mode(furhat):
     furhat.say(text="You decided to enter an anonymous mode. Welcome.")
+    furhat.gesture(name="Smile")
+
     return ANONYM_NAME
 
 def create_new_profile(furhat):
     furhat.say(text="Let's create a new profile for you. "
                     "Tell me your name and password you want to use for your identification. "
                     "Say it slow in order name and password")
+    furhat.gesture(name="Smile")
+    
     time.sleep(5)
 
     identified = False
@@ -129,11 +140,14 @@ def create_new_profile(furhat):
             break
         if name is None:
             furhat.say(text="I didn't get that, can you repeat it?")
+            furhat.gesture(name="BrowRaise")
+
             time.sleep(2)
             continue
 
         if name == ANONYM_NAME:
             furhat.say(text="You can't enter this name, pick a different one.")
+            furhat.gesture(name="Shake")
             time.sleep(2)
             continue
 
@@ -144,6 +158,7 @@ def create_new_profile(furhat):
             time.sleep(2)
             furhat.say(text="Tell me your name and password you want to use for your identification. "
                             "Say it slow in order name and password")
+            furhat.gesture(name="Thoughtful")
             time.sleep(2)
             continue
 
@@ -154,6 +169,7 @@ def create_new_profile(furhat):
             save_name_and_password(name, password)
             furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.")
             time.sleep(2)
+            furhat.gesture(name="BigSmile")
             identified = True
             return name
         else:
@@ -224,6 +240,7 @@ def run_conversation_loop(name, furhat, queue):
                     continue
 
                 furhat.say(text="Do you want me to list you options of other exercises?")
+                furhat.gesture(name="Smile")
                 time.sleep(2)
                 result = furhat.listen()
                 result = result.message
@@ -237,6 +254,8 @@ def run_conversation_loop(name, furhat, queue):
 
         time.sleep(5)
     furhat.say(text="Thank you for spending time with me. Hope to see you next time! Have a great day!")
+    furhat.gesture(name="BigSmile")
+    furhat.gesture(name="CloseEyes")
     end_session(furhat, queue)
     return
 
@@ -261,6 +280,7 @@ def ask_if_offer_option_or_end(furhat, queue):
 def end_session(furhat, queue):
     # TODO save user happiness and stats
     furhat.say(text="You decided to end this session. Thank you for spending time with me today. I'll see you next time. Have a great day!")
+    furhat.gesture(name="CloseEyes")
     queue.queue.clear()
     queue.put(STOP)
 
