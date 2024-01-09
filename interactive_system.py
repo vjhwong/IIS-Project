@@ -68,9 +68,9 @@ def identification(furhat):
             while not identified:
                 name, password = listen_to_name_and_password(furhat)
                 if name == SKIP:
-                    start_anonym_mode(furhat)
+                    return start_anonym_mode(furhat)
                 if name == BACK:
-                    continue
+                    break
                 if name is None:
                     furhat.say(text="I didn't get that, would you like to repeat it " \
                                     "or do you want to create a new profile?")
@@ -124,9 +124,9 @@ def create_new_profile(furhat):
     while not identified:
         name, password = listen_to_name_and_password(furhat)
         if name == SKIP:
-            start_anonym_mode(furhat)
+            return start_anonym_mode(furhat)
         if name == BACK:
-            continue
+            break
         if name is None:
             furhat.say(text="I didn't get that, can you repeat it?")
             time.sleep(2)
@@ -150,7 +150,7 @@ def create_new_profile(furhat):
         furhat.say(text="I understood " + name + " with " + password + " as a password. Is this correct?")
         time.sleep(2)
         result = furhat.listen()
-        if "yes" in result.message or "correct" in result.message and "not correct" not in result.message and "isn't correct" not in result.message:
+        if ("yes" in result.message or "correct" in result.message) and "not correct" not in result.message and "isn't correct" not in result.message:
             save_name_and_password(name, password)
             furhat.say(text="Hello " + name + ", your new profile has been created! I am excited to start our new journey.")
             time.sleep(2)
@@ -450,7 +450,7 @@ def list_mindfulness_exercise_and_let_pick(furhat, lock, queue):
         elif "fourth" in result or "walking meditation" in result:
             picked_option = True
             return walking_meditation(furhat, lock, queue)
-        elif "fifth" in result or "observe" in result or "eyes closes" in result:
+        elif "fifth" in result or "observe" in result or "eyes closed" in result:
             picked_option = True
             return observe_with_eyes_closed(furhat, lock, queue)
         elif "last" in result or "sixth" in result or "gratitude list" in result:
@@ -516,7 +516,7 @@ def was_stop_word_in_response(response):
 
 def breathing_excercice(name, furhat, lock, queue):
     #https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/breathing-exercises-for-stress/
-    furhat.say(text="Here's a simple breathing excercise. Can we start? ")
+    furhat.say(text="Here's a simple breathing exercise. Can we start? ")
     result = furhat.listen()
     if "yes" in result.message:
         furhat.say(text="Let's start. If you wish to stop at any time, you can just say so.")
@@ -623,7 +623,7 @@ def breathing_excercice(name, furhat, lock, queue):
             furhat.say(text="Do you want to stop?")
             result = furhat.listen()
             if "yes" in result.message:
-                return False
+                break
         if iteration == 1:
             furhat.say(
                 text= str(iteration) + " minute has passed. Let's keep doing this, you're doing great!")
