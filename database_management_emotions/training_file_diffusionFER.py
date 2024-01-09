@@ -13,7 +13,7 @@ import warnings
 # to ignore all warnings
 warnings.filterwarnings("ignore")
 
-AU_TO_DROP = ['AU11', 'AU26', 'AU24', 'AU28', 'AU10', 'AU09', 'AU04', 'AU17', 'AU02', 'AU05', 'AU23', 'AU15', 'AU01']
+AU_TO_DROP = ['valence','AU11', 'AU26', 'AU24', 'AU28', 'AU10', 'AU09', 'AU04', 'AU17', 'AU02', 'AU05', 'AU23', 'AU15', 'AU01']
 
 def read_and_preprocess(file_path):
     data = pd.read_csv(file_path)
@@ -95,9 +95,6 @@ def main():
     print("Accuracy of SVM model on the test set: ", accuracy_test_svm*100)
 
 
-
-    
-    #tr
     dump(best_svm_model, 'svm_model.joblib')
 
 if __name__ == "__main__":
