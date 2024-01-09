@@ -14,7 +14,7 @@ warnings.filterwarnings("ignore")
 detector = Detector(device="cuda")
 
 path_to_file = "..\DiffusionFER\DiffusionEmotion_S\dataset_sheet.csv"
-csv_path='.\\diffusionFER_aus.csv'
+csv_path='.\\database_management_emotions\diffusionFER_aus.csv'
 
 #load the annotations
 dataset = pd.read_csv(path_to_file)
@@ -23,7 +23,7 @@ emotions_dict= {0 :'neutral',1:'happy',2:'sad',3:'surprise',4:'fear',5:'disgust'
 
 with open(csv_path, 'w',newline='') as csv_file:
     csv_writer = csv.writer(csv_file)
-    header_row=['emotion','AU01','AU02','AU04','AU05','AU06','AU07','AU09','AU10','AU11','AU12','AU14','AU15','AU17','AU20','AU23','AU24','AU25','AU26','AU28','AU43']
+    header_row=['valence','emotion','AU01','AU02','AU04','AU05','AU06','AU07','AU09','AU10','AU11','AU12','AU14','AU15','AU17','AU20','AU23','AU24','AU25','AU26','AU28','AU43']
     csv_writer.writerow(header_row)
     positive_emotion = {}
     negative_emotion = {}
@@ -72,7 +72,7 @@ with open(csv_path, 'w',newline='') as csv_file:
                     au_idx += 1
                 #print(positive_emotion)
                 #change emotion from number to string with name
-                row_data=[emotions_dict[expression]]+list(aus[0][0])
+                row_data=[valence]+[emotions_dict[expression]]+list(aus[0][0])
                 csv_writer.writerow(row_data)
             else:
                 print("Warning: no face detected")
@@ -95,7 +95,7 @@ with open(csv_path, 'w',newline='') as csv_file:
     plt.tight_layout()
 
     # save 
-    plt.savefig('diffusionFER_aus_visualization.png')
+    plt.savefig('.\database_management_emotions\diffusionFER_aus_visualization.png')
 
     # show the graph
     plt.show()
