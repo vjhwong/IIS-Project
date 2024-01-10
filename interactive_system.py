@@ -3,6 +3,7 @@ from furhat_remote_api import FurhatRemoteAPI
 import time
 import threading
 import password_manager
+import furhat_emotions
 
 global furhat
 
@@ -43,6 +44,7 @@ def furhat_interaction(emotion, furhat):
 # TODO if user doesn't understand, repeat what furhat said
 
 def identification(furhat):
+    furhat.gesture(body=furhat_emotions.HAPPY())
     answered = False
     name = ''
     while not answered:
@@ -60,6 +62,7 @@ def identification(furhat):
         if result.message == '':
             continue
         identified = False
+        furhat.gesture(body=furhat_emotions.reset_emotions())
         if "skip" in result.message or "anonymous" in result.message or "anonym" in result.message:
             return start_anonym_mode(furhat)
 
@@ -221,8 +224,10 @@ def run_conversation_loop(name, furhat, queue):
         if len(em) != 0 and (em[0] is not None or em[0] != ''):
             if first_interaction:
                 reply = START_EMOTION_REPLY.get(em[0])
+
                 time.sleep(2)
                 furhat.say(text=reply)
+                react_based_on_emotion(furhat, em[0])
                 result = furhat.listen() #TODO do sth with the result
                 time.sleep(2)
                 first_interaction = False
@@ -231,12 +236,13 @@ def run_conversation_loop(name, furhat, queue):
                     session_should_end = offer_option_and_end_session_if_user_not_happy(name, furhat, queue, lock)
                     if session_should_end:
                         break
+                    furhat.gesture(name="Smile")
             else:
                 furhat.say(text="Is there anything else I can do for you?")
 
                 wants_exercise_by_emotion = user_wants_to_do_exercise_based_on_emotion(em[0], done_exercises)
                 if wants_exercise_by_emotion:
-                    start_interaction_based_on_emotion(name, furhat, queue, em[0], lock)
+                    was_happy = start_interaction_based_on_emotion(name, furhat, queue, em[0], lock)
                     continue
 
                 furhat.say(text="Do you want me to list you options of other exercises?")
@@ -253,11 +259,27 @@ def run_conversation_loop(name, furhat, queue):
                     break
 
         time.sleep(5)
-    furhat.say(text="Thank you for spending time with me. Hope to see you next time! Have a great day!")
     furhat.gesture(name="BigSmile")
     furhat.gesture(name="CloseEyes")
     end_session(furhat, queue)
     return
+
+def react_based_on_emotion(furhat, emotion):
+    match emotion:
+        case 'fear':
+            furhat.gesture(name="Thoughtful")
+        case 'surprise':
+            furhat.gesture(name="Thoughtful")
+        case 'angry':
+            furhat.gesture(name="Thoughtful")
+        case 'happy':
+            furhat.gesture(name="Smile")
+        case 'sad':
+            furhat.gesture(name="Thoughtful")
+        case 'neutral':
+            furhat.gesture(name="Smile")
+        case 'disgust':
+            furhat.gesture(name="Thoughtful")
 
 def ask_if_offer_option_or_end(furhat, queue):
     answered = False
@@ -353,7 +375,9 @@ def user_wants_to_do_exercise_based_on_emotion(emotion, done_exercises):
 
 def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
     furhat.say(text="I will pick an exercise specifically selected for you right now.")
+    furhat.gesture(body=furhat_emotions.HAPPY())
     time.sleep(5)
+    furhat.gesture(body=furhat_emotions.reset_emotions())
     match emotion:
         case 'fear':
             return mindfulness_exercise(name, furhat, lock, queue)
@@ -376,7 +400,7 @@ def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
 
 def offer_options(name, furhat, queue, lock):
     picked_exercise = False
-
+    furhat.gesture(body=furhat_emotions.SURPRISE(2))
     while not picked_exercise:
         furhat.say(text="I caught that you want to try something different. We can do: ")
         time.sleep(2)
@@ -389,10 +413,12 @@ def offer_options(name, furhat, queue, lock):
         furhat.say(text="mindfulness exercises, I can list them if you'd like. ")
         time.sleep(2)
         furhat.say(text="So, what will it be? If you'd like to leave, you can just tell me to stop.")
+        furhat.gesture(body=furhat_emotions.HAPPY())
         time.sleep(10)
         # TODO tell more about each
         answer = furhat.listen()
         result = answer.message
+        furhat.gesture(body=furhat_emotions.reset_emotions())
         if "first" in result or "breathing exercise" in result:
             picked_exercise = True
             furhat.say(text="Do you want to know more or start or try something different?")
@@ -448,10 +474,12 @@ def list_mindfulness_exercise_and_let_pick(furhat, lock, queue):
         furhat.say(text="There are multiple exercises you can try. "
                         "mindful breathing, body scan, five senses exercise, walking meditation, observe with eyes closed, and gratitude list. "
                         "Which one do you want to try?")
+        furhat.gesture(body=furhat_emotions.HAPPY())
         time.sleep(15)
         result = furhat.listen()
         result = result.message
         print("list mindfulness exercises message: " + result)
+        furhat.gesture(body=furhat_emotions.reset_emotions())
         if "again" in result or "once more" in result or "repeat" in result:
             continue
         elif "stop" in result or "end" in result:
@@ -934,7 +962,7 @@ def meditation_for_happiness(name, furhat, lock, queue):
 
 def mindfulness_exercise(name, furhat, lock, queue):
     furhat.say(text="Let me list all mindfulness exercises for you and then you can pick one")
-
+    furhat.gesture(name='Smile')
     was_happy = list_mindfulness_exercise_and_let_pick(furhat, lock, queue)
     if was_happy:
         return did_session_help(furhat, mindfulness_exercise.__name__)
