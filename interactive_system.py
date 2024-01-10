@@ -179,6 +179,7 @@ def create_new_profile(furhat):
             furhat.say(text="You didn't say it was correct. "
                             "Could you please tell me your name and password you want to use for your identification again?"
                             "Say it slow in order name and password.")
+            furhat.gesture(name="Shake")
             time.sleep(3)
 
 def furhat_should_repeat_itself(message):
@@ -285,6 +286,7 @@ def ask_if_offer_option_or_end(furhat, queue):
     answered = False
     while not answered:
         furhat.say(text="Do you want to see other options? Or do you want to end this session?")
+        furhat.gesture(name="Smile")
         time.sleep(2)
         result = furhat.listen()
         stop_in_response = was_stop_word_in_response(result.message)
@@ -522,6 +524,8 @@ def is_happy_by_emotion(queue, lock): #TODO add original emotion so that if pers
     if len(em) != 0 and (em[0] is not None or em[0] != ''):
         if (em[0] == 'angry' or em[0] == 'disgust'):
             furhat.say(text="I see you don't want to do this.")
+            furhat.gesture(body='Shake')
+
             return user_wants_to_try_something_different(furhat)
     return True
 
@@ -552,6 +556,8 @@ def listen_for_stop_in_response(furhat):
     result = furhat.listen()
     if was_stop_word_in_response(result.message):
         furhat.say(text="I heard stop. Do you want to stop?")
+        furhat.gesture(body=furhat_emotions.SAD(2))
+
         result = furhat.listen()
         if "yes" in result.message:
             return True
@@ -683,6 +689,7 @@ def breathing_exercice(name, furhat, lock, queue):
 
     furhat.say(
         text="You've finished this breathing exercise. You will get the most benefit if you do it regularly, as part of your daily routine.")
+    furhat.gesture(body=furhat_emotions.HAPPY())
 
     return did_session_help(furhat, breathing_exercice.__name__)
 
@@ -692,12 +699,14 @@ def did_session_help(furhat, session_name):
     result = furhat.listen()
     if "yes" in result.message:
         furhat.say(text="I'm glad this helped. Hope to see you tomorrow.")
+        furhat.gesture(name="BigSmile")
     else:
         return False
     return True
 
 def say_comforting_story(furhat, lock, queue):
     furhat.say(text="To understand you better, what happened? Is this work related or school related? Or is it related to relationships?")
+    furhat.gesture(name="Thoughtful")
     caught_answer = False
 
     while not caught_answer:
@@ -833,6 +842,7 @@ def meditation_for_happiness(name, furhat, lock, queue):
     result = furhat.listen()
     if "yes" in result.message:
         furhat.say(text="Let's start. If you wish to stop at any time, you can just say so.")
+        furhat.gesture(body=furhat_emotions.HAPPY())
         time.sleep(2)
     if "how long" in result.message:
         furhat.say(text="This meditation is for 10 minutes.")
@@ -1000,6 +1010,7 @@ def mindful_breathing(furhat, lock, queue):
 
 def body_scan(furhat, lock, queue):
     furhat.say(text="Let's start the body scan exercise")
+    furhat.gesture(body=furhat_emotions.HAPPY())
     time.sleep(2)
     #https://www.mayoclinic.org/healthy-lifestyle/consumer-health/in-depth/mindfulness-exercises/art-20046356
     furhat.say(text="Lie on your back with your legs extended and arms at your sides, palms facing up.")
