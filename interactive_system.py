@@ -317,7 +317,7 @@ def user_wants_to_do_exercise_based_on_emotion(emotion, done_exercises):
             else:
                 furhat.say(text="I would recommend mindfulness exercise for happiness. Do you want to start that?")
         case 'angry':
-            if breathing_excercice.__name__ in done_exercises:
+            if breathing_exercice.__name__ in done_exercises:
                 return False
             else:
                 furhat.say(text="I would recommend breathing exercise. Do you want to start that?")
@@ -327,7 +327,7 @@ def user_wants_to_do_exercise_based_on_emotion(emotion, done_exercises):
             else:
                 furhat.say(text="I would recommend meditation for happiness. Do you want to start that?")
         case 'sad':
-            if breathing_excercice.__name__ in done_exercises:
+            if breathing_exercice.__name__ in done_exercises:
                 return False
             else:
                 furhat.say(text="I would recommend breathing exercise for happiness. Do you want to start that?")
@@ -360,13 +360,13 @@ def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
         case 'surprise':
             return mindfulness_exercise(name, furhat, lock, queue)
         case 'angry':
-            return breathing_excercice(name, furhat, lock, queue)
+            return breathing_exercice(name, furhat, lock, queue)
         case 'happy':
             return meditation_for_happiness(name, furhat, lock, queue)
         case 'sad':
             was_happy = say_comforting_story(furhat, lock, queue)
             if was_happy:
-                return breathing_excercice(name, furhat, lock, queue)
+                return breathing_exercice(name, furhat, lock, queue)
             else:
                 return False
         case 'neutral':
@@ -402,7 +402,7 @@ def offer_options(name, furhat, queue, lock):
                 # TODO explain breathing exercise
                 pass
             # leave option is done outside the if block
-            return breathing_excercice(name, furhat, queue, lock)
+            return breathing_exercice(name, furhat, queue, lock)
         elif "second" in result or "meditation for happiness" in result or "meditation" in result or "happiness" in result:
             picked_exercise = True
             furhat.say(text="Do you want to know more or start or try something different?")
@@ -534,7 +534,7 @@ def was_stop_word_in_response(response):
         return True
     return False
 
-def breathing_excercice(name, furhat, lock, queue):
+def breathing_exercice(name, furhat, lock, queue):
     #https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/breathing-exercises-for-stress/
     furhat.say(text="Here's a simple breathing exercise. Can we start? ")
     result = furhat.listen()
@@ -656,7 +656,7 @@ def breathing_excercice(name, furhat, lock, queue):
     furhat.say(
         text="You've finished this breathing exercise. You will get the most benefit if you do it regularly, as part of your daily routine.")
 
-    return did_session_help(furhat, breathing_excercice.__name__)
+    return did_session_help(furhat, breathing_exercice.__name__)
 
 def did_session_help(furhat, session_name):
     done_exercises.append(session_name)
@@ -701,7 +701,7 @@ def say_comforting_story(furhat, lock, queue):
                     "and overcoming them is what makes life meaningful.")
                 time.sleep(2)
                 result = furhat.listen()
-        if "school" in result or "uni" in result or "university" or "college" in result in result or "teacher" in result or "classmate" in result:
+        if "school" in result or "uni" in result or "university" or "college" in result or "teacher" in result or "classmate" in result:
             caught_answer = True
             furhat.say(
                 "I see. You can tell me more if you wish.")
@@ -907,12 +907,16 @@ def meditation_for_happiness(name, furhat, lock, queue):
     if stopped:
         return False
 
-    result = furhat.listen(timeout = 5*60)
-    if result != '':
-        furhat.say(text="Do you want to stop?")
+    iteration = 1
+    for i in range(10):  # there is no timeout for furhat in this api
         result = furhat.listen()
-        if "yes" in result.message:
-            return False
+        if result != '':
+            furhat.say(text="Do you want to stop?")
+            result = furhat.listen()
+            if "yes" in result.message:
+                break
+        iteration += 1
+        time.sleep(6)
 
     furhat.say(text="Open your eyes.")
     time.sleep(1)
@@ -922,7 +926,7 @@ def meditation_for_happiness(name, furhat, lock, queue):
                "and make larger improvements in your mental health.")
     time.sleep(2)
     furhat.say(text="This simple meditation can have a huge impact on your mindset and your vibration. "
-               "If you practice this excercise tomorrow as well, you will find it so much easier to experience more joy "
+               "If you practice this exercise tomorrow as well, you will find it so much easier to experience more joy "
                "and happiness in your life.")
     time.sleep(2)
 
