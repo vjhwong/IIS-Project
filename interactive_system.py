@@ -421,41 +421,41 @@ def offer_options(name, furhat, queue, lock):
         furhat.gesture(body=furhat_emotions.reset_emotions())
         if "first" in result or "breathing exercise" in result:
             picked_exercise = True
-            furhat.say(text="Do you want to know more or start or try something different?")
-            if "option" in result or "choice" in result or "different" in result:
-                continue
-            if "more" in result:
-                # TODO explain breathing exercise
-                pass
+            #furhat.say(text="Do you want to know more or start or try something different?")
+            #if "option" in result or "choice" in result or "different" in result:
+            #    continue
+            #if "more" in result:
+            #    # TODO explain breathing exercise
+            #    pass
             # leave option is done outside the if block
             return breathing_exercice(name, furhat, queue, lock)
         elif "second" in result or "meditation for happiness" in result or "meditation" in result or "happiness" in result:
             picked_exercise = True
-            furhat.say(text="Do you want to know more or start or try something different?")
-            if "option" in result or "choice" in result or "different" in result:
-                continue
-            if "more" in result:
-                # TODO explain meditation
-                pass
+            #furhat.say(text="Do you want to know more or start or try something different?")
+            #if "option" in result or "choice" in result or "different" in result:
+            #    continue
+            #if "more" in result:
+            #    # TODO explain meditation
+            #    pass
             # leave option is done outside the if block
             return meditation_for_happiness(name, furhat, lock, queue)
         elif "third" in result or "talk" in result or "listen" in result or "comforting" in result:
             picked_exercise = True
-            furhat.say(text="Do you want to know more or start or try something different?")
-            if "option" in result or "choice" in result or "different" in result:
-                continue
-            if "more" in result:
-                # TODO explain listening and comforting
-                pass
+            #furhat.say(text="Do you want to know more or start or try something different?")
+            #if "option" in result or "choice" in result or "different" in result:
+            #    continue
+            #if "more" in result:
+            #    # TODO explain listening and comforting
+            #    pass
             return say_comforting_story(furhat, lock, queue)
         elif "last" in result or "fifth" in result or "mindfulness exercise" in result or "list" in result:
             picked_exercise = True
-            furhat.say(text="Do you want to know more or start or try something different?")
-            if "option" in result or "choice" in result or "different" in result:
-                continue
-            if "more" in result:
-                # TODO explain mindfulness exercise
-                pass
+            #furhat.say(text="Do you want to know more or start or try something different?")
+            #if "option" in result or "choice" in result or "different" in result:
+            #    continue
+            #if "more" in result:
+            #    # TODO explain mindfulness exercise
+            #    pass
             return list_mindfulness_exercise_and_let_pick(furhat, lock, queue)
 
         elif not was_stop_word_in_response(result):
@@ -517,7 +517,7 @@ def get_an_emotion(queue, lock):
     #if em is not None or em != '':
     return em
 
-def is_happy_by_emotion(queue, lock): #TODO add original emotion so that if person is angry at the beginning, it won't stop like this
+def is_happy_by_emotion(queue, lock, furhat): #TODO add original emotion so that if person is angry at the beginning, it won't stop like this
     em = get_an_emotion(queue, lock)
     if len(em) != 0 and (em[0] is not None or em[0] != ''):
         if (em[0] == 'angry' or em[0] == 'disgust'):
@@ -544,7 +544,7 @@ def stopped_if_user_wants_to_stop(queue, lock, furhat): # TODO what if the user 
 def does_user_want_to_stop(queue, lock, furhat):
     if listen_for_stop_in_response(furhat):
         return True
-    if not is_happy_by_emotion(queue, lock):
+    if not is_happy_by_emotion(queue, lock, furhat):
         return True
     return False
 
@@ -562,21 +562,22 @@ def was_stop_word_in_response(response):
         return True
     return False
 
-def breathing_exercice(name, furhat, lock, queue):
+def breathing_exercice(name, furhat, queue, lock):
     #https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/breathing-exercises-for-stress/
     furhat.say(text="Here's a simple breathing exercise. Can we start? ")
+    time.sleep(2)
     result = furhat.listen()
     if "yes" in result.message:
         furhat.say(text="Let's start. If you wish to stop at any time, you can just say so.")
         time.sleep(2)
-    if "how long" in result.message:
+    elif "how long" in result.message:
         furhat.say(text="This breathing exercise takes just a few minutes.")
-    if "other choice" in result.message or "something different" in result.message:
+    elif "other choice" in result.message or "something different" in result.message:
         return False
-    if "no" in result.message:
+    elif "no" in result.message:
         furhat.say(text="I caught that you don't want to do this.")
         return False
-    if was_stop_word_in_response(result.message):
+    elif was_stop_word_in_response(result.message):
         return False
 
     stopped = stopped_if_user_wants_to_stop(queue, lock, furhat)
@@ -689,6 +690,7 @@ def breathing_exercice(name, furhat, lock, queue):
 def did_session_help(furhat, session_name):
     done_exercises.append(session_name)
     furhat.say(text="Thank you for spending time with me. Did this session help?")
+    time.sleep(2)
     result = furhat.listen()
     if "yes" in result.message:
         furhat.say(text="I'm glad this helped. Hope to see you tomorrow.")
