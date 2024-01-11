@@ -14,7 +14,6 @@ import warnings
 warnings.filterwarnings("ignore")
 
 AU_TO_DROP = ['AU10','AU04', 'AU28', 'AU06', 'AU14', 'AU23', 'AU02', 'AU26', 'AU24', 'AU09', 'AU01', 'AU17', 'AU05']
-AU_TO_DROP = []
 
 def read_and_preprocess(file_path):
     data = pd.read_csv(file_path)
