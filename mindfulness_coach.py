@@ -7,6 +7,9 @@ import sys
 import queue
 from joblib import load
 
+# The main file that controls the main application
+# It starts the two other threads with the emotion detection system and the interaction system
+
 end_time_seconds = 30
 def get_emotion(furhat, queue, model, name):
     lock = threading.Lock()
@@ -25,6 +28,7 @@ def get_emotion(furhat, queue, model, name):
 
 
 def start_furhat_and_get_a_name():
+    # Furhter improvements would be that the assistant reacts to user's last session that the assistant stored
     furhat = interactive_system.set_furhat()
     name = interactive_system.start_furhat(furhat)
     return furhat, name

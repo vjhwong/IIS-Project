@@ -5,6 +5,9 @@ import threading
 import password_manager
 import furhat_emotions
 
+# Controls the whole interaction system. It consists of the main conversation loop as well as conversation branches.
+# Such as the different exercises the user can do.
+
 global furhat
 
 START_EMOTION_REPLY = {
@@ -23,7 +26,7 @@ OTHER_OPTION = 'other option'
 END = 'end'
 STOP = 'STOP'
 SKIP = '--SKIP--'
-done_exercises = [] #TODO fill list somewhere
+done_exercises = []
 BACK = '--BACK--'
 
 def set_furhat():
@@ -41,9 +44,11 @@ def furhat_interaction(emotion, furhat):
         if len(emotion) != 0:
             emotion = emotion[0]
 
-# TODO if user doesn't understand, repeat what furhat said
 
 def identification(furhat):
+    # Controls the whole identification process with the password_manager.py file.
+    # It either creates new profile for the user, logs in the user or starts an anonymous mode
+
     furhat.gesture(body=furhat_emotions.HAPPY())
     answered = False
     name = ''
@@ -126,6 +131,7 @@ def start_anonym_mode(furhat):
     return ANONYM_NAME
 
 def create_new_profile(furhat):
+    # creates a new profile for the user with selected password and not already used name
     furhat.say(text="Let's create a new profile for you. "
                     "Tell me your name and password you want to use for your identification. "
                     "Say it slow in order name and password")
@@ -216,6 +222,8 @@ def is_name_and_password_valid(name,password):
     return password_manager.validate_password(name, password)
 
 def run_conversation_loop(name, furhat, queue):
+    # The main conversation loop that starts exercise based on user's emotion
+    # and suggest different exercise after the last one ended.
     lock = threading.Lock()
     conversation_ended = False
     first_interaction = True
@@ -229,7 +237,7 @@ def run_conversation_loop(name, furhat, queue):
                 time.sleep(2)
                 furhat.say(text=reply)
                 react_based_on_emotion(furhat, em[0])
-                result = furhat.listen() #TODO do sth with the result
+                result = furhat.listen()
                 time.sleep(2)
                 first_interaction = False
                 was_happy = start_interaction_based_on_emotion(name, furhat, queue, em[0], lock)
@@ -302,7 +310,7 @@ def ask_if_offer_option_or_end(furhat, queue):
             time.sleep(2)
 
 def end_session(furhat, queue):
-    # TODO save user happiness and stats
+    # TODO save user happiness and stats so that assistent can react to it the next session
     furhat.say(text="You decided to end this session. Thank you for spending time with me today. I'll see you next time. Have a great day!")
     furhat.gesture(name="CloseEyes")
     queue.queue.clear()
@@ -401,6 +409,7 @@ def start_interaction_based_on_emotion(name, furhat, queue, emotion, lock):
             return mindfulness_exercise(name, furhat, lock, queue)
 
 def offer_options(name, furhat, queue, lock):
+    # Offers user all the different exercises
     picked_exercise = False
     furhat.gesture(body=furhat_emotions.SURPRISE(2))
     while not picked_exercise:
@@ -471,6 +480,7 @@ def offer_options(name, furhat, queue, lock):
         time.sleep(5)
 
 def list_mindfulness_exercise_and_let_pick(furhat, lock, queue):
+    # Let user pick a specific mindfulness exercise
     picked_option = False
     while not picked_option:
         furhat.say(text="There are multiple exercises you can try. "
@@ -511,12 +521,14 @@ def list_mindfulness_exercise_and_let_pick(furhat, lock, queue):
         time.sleep(5)
 
 def get_an_emotion(queue, lock):
+    # Reads last emotion from a queue.
+    # The detect faces thread has an access to this queue and puts the predicted emotions there.
+    
     with lock:
         em = queue.get()
     # em = predict_emotion(aus, model)
     print("controller emotion " + em, flush=True)
-    #print(list(queue.queue))
-    #if em is not None or em != '':
+
     return em
 
 def is_happy_by_emotion(queue, lock, furhat): #TODO add original emotion so that if person is angry at the beginning, it won't stop like this
@@ -546,6 +558,8 @@ def stopped_if_user_wants_to_stop(queue, lock, furhat): # TODO what if the user 
 
 
 def does_user_want_to_stop(queue, lock, furhat):
+    # See if user is angry or disgusted, in that case, they're clearly not happy with the exercise picked and pick another one
+    # Or, listen if user said stop in their response
     if listen_for_stop_in_response(furhat):
         return True
     if not is_happy_by_emotion(queue, lock, furhat):

@@ -7,6 +7,8 @@ from feat import Detector
 import warnings
 import threading, queue
 
+# Detects faces of the user from the webcam, extracts features and predicts an emotion that stores to a queue.
+# The interactive system thread has an acces to that queue
 cap = None
 
 AU_TO_DROP = ['AU11', 'AU26', 'AU24', 'AU28', 'AU10', 'AU09', 'AU04', 'AU17', 'AU02', 'AU05', 'AU23', 'AU15', 'AU01']

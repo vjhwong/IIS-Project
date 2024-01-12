@@ -2,6 +2,7 @@ import base64
 import hashlib
 import os
 
+# Password manager manages the password storing and validating
 filename = "secrets.txt"
 
 

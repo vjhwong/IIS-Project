@@ -1,3 +1,4 @@
+# Different implemented emotions of furhat
 def SAD():
     return {
         "frames": [
